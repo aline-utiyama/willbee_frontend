@@ -16,15 +16,25 @@ export async function middleware(req) {
     return NextResponse.redirect(new URL("/login", req.url)); // Redirect to login if not authenticated
   }
 
-  // If user is logged in and trying to access login/signup page, redirect to dashboard
-  if (token && (pathname === "/login" || pathname === "/signup")) {
+  // Redirect authenticated users away from public pages to /dashboard
+  if (
+    token &&
+    (pathname === "/login" || pathname === "/signup" || pathname === "/")
+  ) {
     return NextResponse.redirect(new URL("/dashboard", req.url)); // Redirect to dashboard if logged in
   }
 
-  return NextResponse.next(); // Continue to the requested page if everything is okay
+  return NextResponse.next(); // Continue to the requested page if conditions are satisfied
 }
 
 // Define which routes should trigger the middleware
 export const config = {
-  matcher: ["/login", "/signup", "/dashboard", "/profile", "/settings"],
+  matcher: [
+    "/", // Root
+    "/login",
+    "/signup",
+    "/dashboard/:path*", // Dashboard and its sub-paths
+    "/profile/:path*", // Profile and its sub-paths
+    "/settings/:path*", // Settings and its sub-paths
+  ],
 };
