@@ -36,5 +36,7 @@ export const config = {
     "/dashboard/:path*", // Dashboard and its sub-paths
     "/profile/:path*", // Profile and its sub-paths
     "/settings/:path*", // Settings and its sub-paths
+    "/goal-plans/:path*",
+    "/goals/:path*",
   ],
 };
