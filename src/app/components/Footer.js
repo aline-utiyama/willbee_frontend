@@ -1,3 +1,7 @@
+/** Reference: 
+ * https://flowbite.com/docs/components/footer/
+ * https://tailwindui.com/components/marketing/sections/footers
+ */
 "use client";
 import Link from "next/link";
 import Image from "next/image";
