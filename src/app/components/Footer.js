@@ -23,8 +23,8 @@ export default function Footer() {
           <Link href="/">
             <div className="flex shrink-0 items-center">
               <Image
-                alt="WillBee Logo"
-                src="/images/logo.png"
+                alt="WillBee Footer Logo"
+                src="/images/footer_logo.png"
                 className="h-8 w-auto"
                 width={100}
                 height={100}
