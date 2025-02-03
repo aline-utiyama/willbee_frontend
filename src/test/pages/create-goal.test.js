@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import CreateGoalPage from "./page";
+import CreateGoalPage from "@/app/goals/create/page";
 import { useRouter } from "next/navigation";
 import { logout } from "@/app/actions/auth";
 import { getUser } from "@/app/actions/user";
