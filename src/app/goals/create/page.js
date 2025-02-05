@@ -273,7 +273,7 @@ const CreateGoalPage = () => {
                   htmlFor="repeat_time"
                   className="block text-sm font-bold text-gray-900"
                 >
-                  Repeat Time:
+                  Time:
                 </label>
                 <input
                   id="repeat_time"
@@ -287,60 +287,6 @@ const CreateGoalPage = () => {
                   <p className="text-red-500 text-sm mt-1">
                     {errors.repeatTime}
                   </p>
-                )}
-              </div>
-
-              {/* Set Reminder */}
-              <div>
-                <div className="flex items-center">
-                  <label
-                    htmlFor="reminder_minutes"
-                    className="block text-sm font-bold text-gray-900"
-                  >
-                    Set Reminder:
-                  </label>
-                  <Switch
-                    checked={setReminder}
-                    onChange={setSetReminder}
-                    className="mx-3 group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-[checked]:bg-blue-500"
-                  >
-                    <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
-                  </Switch>
-                </div>
-
-                {setReminder && (
-                  <div className="mt-2">
-                    <div className="sm:col-span-3">
-                      <div className="mt-2 grid grid-cols-1">
-                        <select
-                          id="reminder_minutes"
-                          name="reminder_minutes"
-                          type="number"
-                          value={reminderMinutes}
-                          onChange={(e) =>
-                            setReminderMinutes(parseInt(e.target.value))
-                          }
-                          className="col-start-1 row-start-1 w-full appearance-none rounded-md border bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                        >
-                          <option value="0">At time of event</option>
-                          <option value="5">5 minutes before</option>
-                          <option value="10">10 minutes before</option>
-                          <option value="15">15 minutes before</option>
-                          <option value="30">30 minutes before</option>
-                          <option value="60">1 hour before</option>
-                        </select>
-                        <ChevronDownIcon
-                          aria-hidden="true"
-                          className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-                        />
-                        {errors.reminderMinutes && (
-                          <p className="text-red-500 text-sm mt-1">
-                            {errors.reminderMinutes}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
                 )}
               </div>
 
@@ -437,6 +383,60 @@ const CreateGoalPage = () => {
                     </label>
                   </div>
                 </div>
+              </div>
+
+              {/* Set Reminder */}
+              <div>
+                <div className="flex items-center">
+                  <label
+                    htmlFor="reminder_minutes"
+                    className="block text-sm font-bold text-gray-900"
+                  >
+                    Set Reminder:
+                  </label>
+                  <Switch
+                    checked={setReminder}
+                    onChange={setSetReminder}
+                    className="mx-3 group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-[checked]:bg-blue-500"
+                  >
+                    <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
+                  </Switch>
+                </div>
+
+                {setReminder && (
+                  <div className="mt-2">
+                    <div className="sm:col-span-3">
+                      <div className="mt-2 grid grid-cols-1">
+                        <select
+                          id="reminder_minutes"
+                          name="reminder_minutes"
+                          type="number"
+                          value={reminderMinutes}
+                          onChange={(e) =>
+                            setReminderMinutes(parseInt(e.target.value))
+                          }
+                          className="col-start-1 row-start-1 w-full appearance-none rounded-md border bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        >
+                          <option value="0">At time of event</option>
+                          <option value="5">5 minutes before</option>
+                          <option value="10">10 minutes before</option>
+                          <option value="15">15 minutes before</option>
+                          <option value="30">30 minutes before</option>
+                          <option value="60">1 hour before</option>
+                        </select>
+                        <ChevronDownIcon
+                          aria-hidden="true"
+                          className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                        />
+                        {errors.reminderMinutes && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {errors.reminderMinutes}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Submit Button */}
