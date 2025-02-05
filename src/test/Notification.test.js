@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import Notification from "./Notification";
+import Notification from "@/app/components/Notification";
 
 describe("Notification", () => {
   let onCloseMock;

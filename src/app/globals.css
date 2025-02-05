@@ -5,6 +5,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --custom-yellow: #f5c419;
+  --custom-yellow-light: #f9d855;
+  --custom-purple: #5525ff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,4 +21,16 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.bg-custom-yellow {
+  background-color: var(--custom-yellow);
+}
+
+.bg-custom-yellow-light {
+  background-color: var(--custom-yellow-light);
+}
+
+.bg-custom-purple {
+  background-color: var(--custom-purple);
 }
