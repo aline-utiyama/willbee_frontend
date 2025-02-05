@@ -449,6 +449,15 @@ const CreateGoalPage = () => {
                 </button>
               </div>
             </form>
+            {/* Back Button */}
+            <div className="mt-4">
+              <button
+                onClick={() => router.push("/settings")}
+                className="flex w-full h-9 justify-center items-center rounded-md bg-gray-200 border-2 border-black px-3 py-1.5 text-sm font-semibold text-black shadow-xs hover:bg-gray-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Back to Settings
+              </button>
+            </div>
           </div>
         </div>
       </div>
