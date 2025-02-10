@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getGoal } from "../../actions/goals";
 import GoalCard from "../../components/GoalCard";
+import railsAPI from "@/services/rails-api";
 
 const GoalsList = () => {
   const [goals, setGoals] = useState([]);
@@ -11,9 +11,8 @@ const GoalsList = () => {
 
   const fetchGoals = async () => {
     try {
-      const goalsData = await getGoal();
-      console.log("Fetched goals data:", goalsData); // Add this line
-      setGoals(goalsData);
+      const response = await railsAPI.get(`/goals`);
+      setGoals(response.data);
     } catch (err) {
       setError("Failed to fetch goals data");
     }
@@ -75,18 +74,19 @@ const GoalsList = () => {
           </li>
         </ol>
       </nav>
-      <h1 className="text-2xl font-bold text-gray-900">My Goals</h1>
+
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {Array.isArray(goals) && goals.map((goal) => (
-          <div
-            key={goal.id}
-            onClick={() => router.push(`/goals/${goal.id}`)}
-            className="cursor-pointer"
-          >
-            <GoalCard title={goal.title} graph_type={goal.graph_type} />
-          </div>
-        ))}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 mx-auto flex max-w-2xl items-center py-4 px-2">
+        {Array.isArray(goals) &&
+          goals.map((goal) => (
+            <div
+              key={goal.id}
+              onClick={() => router.push(`/goals/${goal.id}`)}
+              className="cursor-pointer"
+            >
+              <GoalCard title={goal.title} graph_type={goal.graph_type} />
+            </div>
+          ))}
       </div>
     </div>
   );
