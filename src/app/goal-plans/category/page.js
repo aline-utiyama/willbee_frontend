@@ -15,7 +15,7 @@ const GoalPlansCategory = () => {
   ];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 mx-auto flex max-w-2xl items-center py-4 px-2">
       <h1 className="text-2xl font-bold mb-4">Goal Plans Category</h1>
       <ul className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-2">
         {categories.map((category) => (
