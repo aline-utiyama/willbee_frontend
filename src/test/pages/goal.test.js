@@ -55,10 +55,10 @@ describe("GoalPage", () => {
     fireEvent.click(screen.getByText("Edit"));
     expect(screen.getByText("Edit Goal")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText("Title"), {
+    fireEvent.change(screen.getByLabelText("Title:"), {
       target: { value: "Master Kanji" },
     });
-    fireEvent.change(screen.getByLabelText("Purpose"), {
+    fireEvent.change(screen.getByLabelText("Purpose:"), {
       target: { value: "Pass JLPT N1" },
     });
 
@@ -93,8 +93,10 @@ describe("GoalPage", () => {
     fireEvent.click(screen.getByText("Edit"));
     expect(screen.getByText("Edit Goal")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText("Title"), { target: { value: "" } });
-    fireEvent.change(screen.getByLabelText("Purpose"), {
+    fireEvent.change(screen.getByLabelText("Title:"), {
+      target: { value: "" },
+    });
+    fireEvent.change(screen.getByLabelText("Purpose:"), {
       target: { value: "A" },
     });
     fireEvent.click(screen.getByText("Save"));
@@ -129,7 +131,7 @@ describe("GoalPage", () => {
     expect(screen.getByText("Edit Goal")).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByLabelText("Title")).toHaveValue("Learn Japanese");
+      expect(screen.getByLabelText("Title:")).toHaveValue("Learn Japanese");
     });
 
     fireEvent.click(screen.getByText("Save"));
