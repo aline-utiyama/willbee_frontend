@@ -22,7 +22,7 @@ const GoalsList = () => {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
       <nav aria-label="Breadcrumb">
         <ol
           role="list"
