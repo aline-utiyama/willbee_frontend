@@ -39,7 +39,7 @@ describe("CreateGoalPage Component", () => {
     expect(screen.getByLabelText("Title:")).toBeInTheDocument();
     expect(screen.getByLabelText("Purpose:")).toBeInTheDocument();
     expect(screen.getByLabelText("Repeat Term:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Repeat Time:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Time:")).toBeInTheDocument();
     expect(screen.getByLabelText("Set Reminder:")).toBeInTheDocument();
     expect(screen.getByLabelText("Duration:")).toBeInTheDocument();
     expect(screen.getByText("Create Goal")).toBeInTheDocument();
@@ -123,7 +123,7 @@ describe("CreateGoalPage Component", () => {
     fireEvent.change(screen.getByLabelText("Repeat Term:"), {
       target: { value: "weekly" },
     });
-    fireEvent.change(screen.getByLabelText("Repeat Time:"), {
+    fireEvent.change(screen.getByLabelText("Time:"), {
       target: { value: "14:00" },
     });
     fireEvent.change(screen.getByLabelText("Duration:"), {
