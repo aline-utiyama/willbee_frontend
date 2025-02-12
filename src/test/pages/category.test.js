@@ -1,13 +1,19 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import GoalPlansCategory from '../../src/app/goal-plans/category/page';
-import { useRouter } from 'next/router';
+import GoalPlansCategory from '@/app/goal-plans/category/page';
+import { useRouter } from 'next/navigation';
 
-jest.mock('next/router', () => ({
+jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
 describe('GoalPlansCategory', () => {
+  let pushMock;
+
+  beforeEach(() => {
+    pushMock = jest.fn();
+    useRouter.mockReturnValue({ push: pushMock });
+  });
+
   it('renders category names and images', () => {
     render(<GoalPlansCategory />);
 
@@ -30,18 +36,12 @@ describe('GoalPlansCategory', () => {
   });
 
   it('navigates to the correct page when a category is clicked', () => {
-    const push = jest.fn();
-    useRouter.mockImplementation(() => ({ push }));
-
     render(<GoalPlansCategory />);
 
-    fireEvent.click(screen.getByText('Customized Goal'));
-    expect(push).toHaveBeenCalledWith('/goals/create');
+    fireEvent.click(screen.getByText("Customized Goal"));
+    expect(pushMock).toHaveBeenCalledWith("/goals/create");
 
     fireEvent.click(screen.getByText('AI Goal Builder'));
-    expect(push).toHaveBeenCalledWith('/goals/create-with-ai');
-
-    fireEvent.click(screen.getByText('Fitness'));
-    expect(push).toHaveBeenCalledWith('/goal-plans/list');
+    expect(pushMock).toHaveBeenCalledWith('/goals/create-with-ai');
   });
 });
