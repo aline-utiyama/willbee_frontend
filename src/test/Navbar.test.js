@@ -34,7 +34,8 @@ describe("Navbar Component", () => {
     const userMenu = screen.getByText("Open user menu");
     fireEvent.click(userMenu);
 
-    expect(screen.getByText("Your Profile")).toBeInTheDocument();
+    expect(screen.getByText("My Goals")).toBeInTheDocument();
+    expect(screen.getByText("My Profile")).toBeInTheDocument();
     expect(screen.getByText("Settings")).toBeInTheDocument();
     expect(screen.getByText("Sign out")).toBeInTheDocument();
   });
