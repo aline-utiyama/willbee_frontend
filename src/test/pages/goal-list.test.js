@@ -1,6 +1,5 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import GoalsList from '../../src/app/goals/list/page';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import GoalsList from '@/app/goals/list/page';
 import railsAPI from '@/services/rails-api';
 import { useRouter } from 'next/navigation';
 
