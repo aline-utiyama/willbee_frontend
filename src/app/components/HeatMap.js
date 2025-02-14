@@ -100,7 +100,7 @@ const GoalProgressHeatmap = ({ goalData }) => {
         const nextDate = new Date(filledDataset[filledDataset.length - 1].date);
         nextDate.setDate(nextDate.getDate() + 1);
         filledDataset.push({
-          date: formatDate(prevDate),
+          date: formatDate(nextDate),
           week: d3.timeFormat("%U")(nextDate),
           day: nextDate.getDay(),
           month: d3.timeFormat("%b")(nextDate),
