@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import railsAPI from "@/services/rails-api";
 import { useRouter } from "next/navigation";
+import GoalProgressBarChart from "@/app/components/BarChart";
+import GoalProgressHeatmap from "@/app/components/HeatMap";
 
 const GoalPage = () => {
   const { id } = useParams();
@@ -373,6 +375,14 @@ const GoalPage = () => {
             </div>
           </div>
         )}
+        <div className="flex justify-center pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
+          {goal.graph_type == "bar" && goal.goal_progresses && (
+            <GoalProgressBarChart goalData={goal} />
+          )}
+          {goal.graph_type == "dot" && goal.goal_progresses && (
+            <GoalProgressHeatmap goalData={goal} />
+          )}
+        </div>
       </div>
     </div>
   );
