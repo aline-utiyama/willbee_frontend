@@ -7,16 +7,16 @@ import { useRouter } from "next/navigation";
 import GoalProgressBarChart from "@/app/components/BarChart";
 import GoalProgressHeatmap from "@/app/components/HeatMap";
 
-const getAvatarEmoji = (progress) => {
-  if (progress >= 75) return "😃"; // Happy face for high progress
-  if (progress >= 50) return "🙂"; // Slightly happy face for medium progress
-  if (progress >= 25) return "😐"; // Neutral face for low progress
-  return "😟"; // Sad face for very low progress
+const getAvatarEmoji = (currentStreak) => {
+  if (currentStreak >= 10) return "🤩"; // Happy face for high streak
+  if (currentStreak >= 5) return "😊"; // Slightly happy face for medium streak
+  if (currentStreak >= 1) return "😐"; // Neutral face for low streak
+  return "😟"; // Sad face for no streak
 };
 
 const GoalPage = () => {
   const { id } = useParams();
-  const [goal, setGoal] = useState({ title: "", purpose: "" });
+  const [goal, setGoal] = useState({ title: "", purpose: "", goal_progresses: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,7 +29,8 @@ const GoalPage = () => {
 
   const dropdownRef = useRef(null);
   const router = useRouter();
-  const [progress, setProgress] = useState(0); // Add progress state
+  const [currentStreak, setCurrentStreak] = useState(0); // Add current streak state
+  const [isCompleted, setIsCompleted] = useState(false); // Add isCompleted state
 
   useEffect(() => {
     if (!id) return;
@@ -43,7 +44,9 @@ const GoalPage = () => {
           const goalData = response.data;
           setGoal(goalData);
           setFormData({ title: goalData.title, purpose: goalData.purpose });
+          setCurrentStreak(goalData.goal_progresses.length > 0 ? goalData.goal_progresses[goalData.goal_progresses.length - 1].current_streak : 0);
           setLoading(false);
+          console.log(goalData);
         }
       } catch (err) {
         if (err.status === 404) {
@@ -54,21 +57,7 @@ const GoalPage = () => {
         }
       }
     };
-
-    //
-    const fetchGoalProgress = async () => {
-      try {
-        const response = await railsAPI.get(`/goal_progress/${id}`);
-        if (response.status === 200) {
-          const goalProgress = response.data;
-          setProgress(goalProgress.progress);
-        }
-      } catch (err) {
-        setError("Failed to fetch goal progress. Please try again.");
-      }
-    };
     fetchGoalData();
-    // fetchGoalProgress();
   }, [id]);
 
 
@@ -163,6 +152,35 @@ const GoalPage = () => {
       }
     } catch (err) {
       setError("Failed to delete goal. Please try again.");
+    }
+  };
+
+  const handleMarkAsCompleted = async () => {
+    try {
+      const newProgress = {
+        completed: true,
+        checked_at: new Date().toISOString(),
+        current_streak: goal.goal_progresses.length > 0 ? goal.goal_progresses[goal.goal_progresses.length - 1].current_streak + 1 : 1,
+        date: new Date().toISOString().split('T')[0],
+        goal_id: id,
+      };
+
+      const updatedGoalProgresses = [...goal.goal_progresses, newProgress];
+
+      const response = await railsAPI.put(`/goals/${id}`, {
+        goal: {
+          goal_progresses: updatedGoalProgresses,
+        },
+      });
+
+      if (response.status === 200) {
+        const updatedGoal = await response.data;
+        setCurrentStreak(newProgress.current_streak); // Update current streak
+        setIsCompleted(true); // Disable button after completion
+        setGoal(updatedGoal);
+      }
+    } catch (err) {
+      setError("Failed to mark task as completed. Please try again.");
     }
   };
 
@@ -300,10 +318,10 @@ const GoalPage = () => {
         </div>
         {/* Avatar Emoji */}
         <div className="text-center py-8">
-          <span className="text-6xl">{getAvatarEmoji(progress)}</span>
+          <span className="text-6xl">{getAvatarEmoji(currentStreak)}</span>
         </div>
         <div className="py-8">
-          <ol>
+          <ol className="list-item list-inside">
             <li>{goal.purpose}</li>
             <li>{goal.repeat_term}</li>
             {goal.duration === "specific_duration" && (
@@ -312,6 +330,29 @@ const GoalPage = () => {
               </li>
             )}
           </ol>
+        </div>
+        <div className="text-center py-8 justify-center flex flex-col gap-2">
+          <p className="text-xl">My progress</p>
+          {/* Progress graph */}
+          <div className="flex justify-center pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
+            {goal.graph_type == "bar" && goal.goal_progresses && (
+              <GoalProgressBarChart goalData={goal} />
+            )}
+            {goal.graph_type == "dot" && goal.goal_progresses && (
+              <GoalProgressHeatmap goalData={goal} />
+            )}
+          </div>
+          {/* Mark as Completed Button */}
+          <div className="text-center px-4 py-4 flex flex-col gap-2 pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
+            <p className="text-base font-bold text-left">Did you complete your task today?</p>
+            <button
+              onClick={handleMarkAsCompleted}
+              className={`px-4 py-2 rounded text-sm ${isCompleted ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-600'}`}
+              disabled={isCompleted} // Disable button if task is completed
+            >
+              {isCompleted ? "Task Completed" : "Mark as Completed"}
+            </button>
+          </div>
         </div>
         {/* Edit Modal */}
         {isModalOpen && (
@@ -402,14 +443,7 @@ const GoalPage = () => {
             </div>
           </div>
         )}
-        <div className="flex justify-center pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
-          {goal.graph_type == "bar" && goal.goal_progresses && (
-            <GoalProgressBarChart goalData={goal} />
-          )}
-          {goal.graph_type == "dot" && goal.goal_progresses && (
-            <GoalProgressHeatmap goalData={goal} />
-          )}
-        </div>
+
       </div>
     </div>
   );
