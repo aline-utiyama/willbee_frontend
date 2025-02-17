@@ -5,6 +5,13 @@ import { useParams } from "next/navigation";
 import railsAPI from "@/services/rails-api";
 import { useRouter } from "next/navigation";
 
+const getAvatarEmoji = (progress) => {
+  if (progress >= 75) return "😃"; // Happy face for high progress
+  if (progress >= 50) return "🙂"; // Slightly happy face for medium progress
+  if (progress >= 25) return "😐"; // Neutral face for low progress
+  return "😟"; // Sad face for very low progress
+};
+
 const GoalPage = () => {
   const { id } = useParams();
   const [goal, setGoal] = useState({ title: "", purpose: "" });
@@ -20,6 +27,7 @@ const GoalPage = () => {
 
   const dropdownRef = useRef(null);
   const router = useRouter();
+  const [progress, setProgress] = useState(0); // Add progress state
 
   useEffect(() => {
     if (!id) return;
@@ -45,8 +53,23 @@ const GoalPage = () => {
       }
     };
 
+    //
+    const fetchGoalProgress = async () => {
+      try {
+        const response = await railsAPI.get(`/goal_progress/${id}`);
+        if (response.status === 200) {
+          const goalProgress = response.data;
+          setProgress(goalProgress.progress);
+        }
+      } catch (err) {
+        setError("Failed to fetch goal progress. Please try again.");
+      }
+    };
     fetchGoalData();
+    // fetchGoalProgress();
   }, [id]);
+
+
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -272,6 +295,10 @@ const GoalPage = () => {
               </div>
             )}
           </div>
+        </div>
+        {/* Avatar Emoji */}
+        <div className="text-center py-8">
+          <span className="text-6xl">{getAvatarEmoji(progress)}</span>
         </div>
         <div className="py-8">
           <ol>
