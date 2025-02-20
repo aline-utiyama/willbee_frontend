@@ -54,10 +54,6 @@ const GoalPlansCreatePage = () => {
       formErrors.repeatTerm = "Repeat term is required.";
     }
 
-    if (!repeatTime) {
-      formErrors.repeatTime = "Repeat time is required.";
-    }
-
     if (duration === "specific_duration" && !durationLength) {
       formErrors.durationLength = "Duration length is required.";
     }
@@ -275,29 +271,6 @@ const GoalPlansCreatePage = () => {
                     </p>
                   )}
                 </div>
-              </div>
-
-              {/* Repeat Time */}
-              <div>
-                <label
-                  htmlFor="repeat_time"
-                  className="block text-sm font-bold text-gray-900"
-                >
-                  Time:
-                </label>
-                <input
-                  id="repeat_time"
-                  name="repeat_time"
-                  type="time"
-                  value={repeatTime}
-                  onChange={(e) => setRepeatTime(e.target.value)}
-                  className="block w-full rounded-md bg-white mt-2 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-200 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-                {errors.repeatTime && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.repeatTime}
-                  </p>
-                )}
               </div>
 
               {/* Set Duration */}

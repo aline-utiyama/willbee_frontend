@@ -40,7 +40,6 @@ describe("GoalPlansCreatePage Component", () => {
     expect(screen.getByLabelText("Purpose:")).toBeInTheDocument();
     expect(screen.getByLabelText("Advice:")).toBeInTheDocument();
     expect(screen.getByLabelText("Repeat Term:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Time:")).toBeInTheDocument();
     expect(screen.getByLabelText("Duration:")).toBeInTheDocument();
     expect(screen.getByText("Create Goal Plan")).toBeInTheDocument();
   });
