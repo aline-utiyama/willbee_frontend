@@ -39,6 +39,7 @@ describe("GoalPlansCreatePage Component", () => {
     expect(screen.getByLabelText("Title:")).toBeInTheDocument();
     expect(screen.getByLabelText("Purpose:")).toBeInTheDocument();
     expect(screen.getByLabelText("Advice:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Category:")).toBeInTheDocument();
     expect(screen.getByLabelText("Repeat Term:")).toBeInTheDocument();
     expect(screen.getByLabelText("Time:")).toBeInTheDocument();
     expect(screen.getByLabelText("Duration:")).toBeInTheDocument();
@@ -57,6 +58,10 @@ describe("GoalPlansCreatePage Component", () => {
     fireEvent.change(screen.getByLabelText("Purpose:"), {
       target: { value: "Test Purpose" },
     });
+    fireEvent.change(screen.getByLabelText("Category:"), {
+      target: { value: "Other" },
+    });
+
     fireEvent.click(screen.getByText("Create Goal Plan"));
 
     await waitFor(() => {
@@ -66,6 +71,7 @@ describe("GoalPlansCreatePage Component", () => {
           goal_plan: expect.objectContaining({
             title: "Test Goal Plan",
             purpose: "Test Purpose",
+            category: "Other",
           }),
         })
       );
@@ -108,6 +114,7 @@ describe("GoalPlansCreatePage Component", () => {
       expect(
         screen.getByText("Duration measure is required.")
       ).toBeInTheDocument();
+      expect(screen.getByText("Category is required.")).toBeInTheDocument();
     });
   });
 
@@ -123,24 +130,15 @@ describe("GoalPlansCreatePage Component", () => {
     fireEvent.change(screen.getByLabelText("Purpose:"), {
       target: { value: "Test Purpose" },
     });
+    fireEvent.change(screen.getByLabelText("Category:"), {
+      target: { value: "Other" },
+    });
     fireEvent.click(screen.getByText("Create Goal Plan"));
 
     await waitFor(() => {
       expect(
         screen.getByText("Failed to create goal plan. Please try again.")
       ).toBeInTheDocument();
-    });
-  });
-
-  it("logs out and redirects to login if fetching user data fails", async () => {
-    getUser.mockRejectedValue(new Error("User fetch failed"));
-    logout.mockImplementation((callback) => callback());
-
-    render(<GoalPlansCreatePage />);
-
-    await waitFor(() => {
-      expect(logout).toHaveBeenCalled();
-      expect(pushMock).toHaveBeenCalledWith("/login");
     });
   });
 });

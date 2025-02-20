@@ -1,17 +1,26 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import railsAPI from "@/services/rails-api";
-import { logout } from "@/app/actions/auth";
-import { getUser } from "@/app/actions/user";
 import Notification from "@/app/components/Notification";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
+const CATEGORIES = [
+  "Fitness",
+  "Health",
+  "Music",
+  "Personal Growth",
+  "Career",
+  "Sports",
+  "Reading",
+  "Other",
+];
+
 const GoalPlansCreatePage = () => {
-  const [userId, setUserId] = useState("");
   const [title, setTitle] = useState("");
   const [purpose, setPurpose] = useState("");
   const [advice, setAdvice] = useState("");
+  const [category, setCategory] = useState("");
   const [repeatTerm, setRepeatTerm] = useState("daily");
   const [repeatTime, setRepeatTime] = useState("09:00");
   const [duration, setDuration] = useState("specific_duration");
@@ -23,16 +32,6 @@ const GoalPlansCreatePage = () => {
 
   // Error state
   const [errors, setErrors] = useState({});
-
-  // Fetch user data
-  const fetchUserData = async () => {
-    try {
-      const user = await getUser(); // Call the getUser action
-      setUserId(user.id || "");
-    } catch (err) {
-      logout(() => router.push("/login"));
-    }
-  };
 
   // Handle goal Plan creation
   const handleGoalPlanCreate = async (e) => {
@@ -49,6 +48,8 @@ const GoalPlansCreatePage = () => {
     if (!purpose) {
       formErrors.purpose = "Purpose is required.";
     }
+
+    if (!category) formErrors.category = "Category is required.";
 
     if (!repeatTerm) {
       formErrors.repeatTerm = "Repeat term is required.";
@@ -75,6 +76,7 @@ const GoalPlansCreatePage = () => {
       title,
       purpose,
       advice,
+      category,
       repeat_term: repeatTerm,
       repeat_time: repeatTime,
       duration,
@@ -101,11 +103,6 @@ const GoalPlansCreatePage = () => {
       setLoading(false);
     }
   };
-
-  // Fetch user data on component mount
-  useEffect(() => {
-    fetchUserData();
-  }, []);
 
   return (
     <>
@@ -243,6 +240,37 @@ const GoalPlansCreatePage = () => {
                     <p className="text-red-500 text-sm mt-1">{errors.advice}</p>
                   )}
                 </div>
+              </div>
+
+              {/* Category Selector */}
+              <div>
+                <label
+                  htmlFor="category"
+                  className="block text-sm font-bold text-gray-900"
+                >
+                  Category:
+                </label>
+                <div className="relative mt-2">
+                  <select
+                    id="category"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="block w-full appearance-none rounded-md border bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-indigo-600"
+                  >
+                    <option value="" disabled>
+                      Select a category
+                    </option>
+                    {CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDownIcon className="pointer-events-none absolute right-2 top-2.5 h-5 w-5 text-gray-500" />
+                </div>
+                {errors.category && (
+                  <p className="text-red-500 text-sm mt-1">{errors.category}</p>
+                )}
               </div>
 
               {/* Repeat Term */}
