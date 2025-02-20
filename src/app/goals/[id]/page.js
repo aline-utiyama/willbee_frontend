@@ -16,7 +16,11 @@ const getAvatarEmoji = (currentStreak) => {
 
 const GoalPage = () => {
   const { id } = useParams();
-  const [goal, setGoal] = useState({ title: "", purpose: "", goal_progresses: [] });
+  const [goal, setGoal] = useState({
+    title: "",
+    purpose: "",
+    goal_progresses: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,6 +35,8 @@ const GoalPage = () => {
   const router = useRouter();
   const [currentStreak, setCurrentStreak] = useState(0); // Add current streak state
   const [isCompleted, setIsCompleted] = useState(false); // Add isCompleted state
+  const [progressUpdated, setProgressUpdated] = useState(false);
+  const dateToday = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     if (!id) return;
@@ -44,9 +50,8 @@ const GoalPage = () => {
           const goalData = response.data;
           setGoal(goalData);
           setFormData({ title: goalData.title, purpose: goalData.purpose });
-          setCurrentStreak(goalData.goal_progresses.length > 0 ? goalData.goal_progresses[goalData.goal_progresses.length - 1].current_streak : 0);
+          checkGoalProgress(goalData.goal_progresses);
           setLoading(false);
-          console.log(goalData);
         }
       } catch (err) {
         if (err.status === 404) {
@@ -58,9 +63,13 @@ const GoalPage = () => {
       }
     };
     fetchGoalData();
-  }, [id]);
+  }, [id, progressUpdated]);
 
-
+  const checkGoalProgress = (goalProgresses) => {
+    const record = goalProgresses.find((entry) => entry.date === dateToday);
+    setIsCompleted(record.completed);
+    setCurrentStreak(record.current_streak);
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -155,29 +164,16 @@ const GoalPage = () => {
     }
   };
 
-  const handleMarkAsCompleted = async () => {
+  const handleMarkTodayAsCompleted = async () => {
     try {
-      const newProgress = {
-        completed: true,
-        checked_at: new Date().toISOString(),
-        current_streak: goal.goal_progresses.length > 0 ? goal.goal_progresses[goal.goal_progresses.length - 1].current_streak + 1 : 1,
-        date: new Date().toISOString().split('T')[0],
+      const response = await railsAPI.patch(`/goal_progresses/complete_today`, {
         goal_id: id,
-      };
-
-      const updatedGoalProgresses = [...goal.goal_progresses, newProgress];
-
-      const response = await railsAPI.put(`/goals/${id}`, {
-        goal: {
-          goal_progresses: updatedGoalProgresses,
-        },
+        date_today: dateToday,
       });
 
       if (response.status === 200) {
-        const updatedGoal = await response.data;
-        setCurrentStreak(newProgress.current_streak); // Update current streak
+        setProgressUpdated(true);
         setIsCompleted(true); // Disable button after completion
-        setGoal(updatedGoal);
       }
     } catch (err) {
       setError("Failed to mark task as completed. Please try again.");
@@ -186,6 +182,12 @@ const GoalPage = () => {
 
   const validateMinLength = (text, minLength = 2) => {
     return text.trim().length >= minLength;
+  };
+
+  const repeatMapping = {
+    daily: "Every Day",
+    weekly: "Every Week",
+    monthly: "Every Month",
   };
 
   if (loading) {
@@ -320,16 +322,39 @@ const GoalPage = () => {
         <div className="text-center py-8">
           <span className="text-6xl">{getAvatarEmoji(currentStreak)}</span>
         </div>
-        <div className="py-8">
-          <ol className="list-item list-inside">
-            <li>{goal.purpose}</li>
-            <li>{goal.repeat_term}</li>
+        <div className="mt-6 ">
+          <dl className="divide-y divide-gray-100">
+            <div className="px-4 py-2 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0">
+              <dt className="text-sm/6 font-medium text-gray-900">Purpose:</dt>
+              <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-4 sm:mt-0">
+                {goal.purpose}
+              </dd>
+            </div>
+            <div className="px-4 py-2 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0">
+              <dt className="text-sm/6 font-medium text-gray-900">Repeat:</dt>
+              <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-4 sm:mt-0">
+                {repeatMapping[goal.repeat_term]}
+              </dd>
+            </div>
             {goal.duration === "specific_duration" && (
-              <li>
-                {goal.duration_length} {goal.duration_measure}
-              </li>
+              <div className="px-4 py-2 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0">
+                <dt className="text-sm/6 font-medium text-gray-900">
+                  Duration:
+                </dt>
+                <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-4 sm:mt-0">
+                  {goal.duration_length} {goal.duration_measure}
+                </dd>
+              </div>
             )}
-          </ol>
+            {goal.advice && (
+              <div className="px-4 py-2 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0">
+                <dt className="text-sm/6 font-medium text-gray-900">Advice:</dt>
+                <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-4 sm:mt-0">
+                  {goal.advice}
+                </dd>
+              </div>
+            )}
+          </dl>
         </div>
         <div className="text-center py-8 justify-center flex flex-col gap-2">
           <p className="text-xl">My progress</p>
@@ -343,11 +368,17 @@ const GoalPage = () => {
             )}
           </div>
           {/* Mark as Completed Button */}
-          <div className="text-center px-4 py-4 flex flex-col gap-2 pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
-            <p className="text-base font-bold text-left">Did you complete your task today?</p>
+          <div className="mt-6 px-4 py-4 flex flex-col rounded-md border-t border-gray-200 bg-white shadow-md">
+            <p className="mb-6 text-base font-bold text-left">
+              Did you complete your task today?
+            </p>
             <button
-              onClick={handleMarkAsCompleted}
-              className={`px-4 py-2 rounded text-sm ${isCompleted ? 'bg-gray-400 text-gray-700 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-600'}`}
+              onClick={handleMarkTodayAsCompleted}
+              className={`px-4 py-2 rounded text-sm ${
+                isCompleted
+                  ? "bg-gray-400 text-white font-bold cursor-not-allowed"
+                  : "bg-black text-white font-bold hover:bg-gray-600"
+              }`}
               disabled={isCompleted} // Disable button if task is completed
             >
               {isCompleted ? "Task Completed" : "Mark as Completed"}
@@ -443,7 +474,6 @@ const GoalPage = () => {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );
