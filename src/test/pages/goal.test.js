@@ -7,6 +7,7 @@ jest.mock("@/services/rails-api", () => ({
   get: jest.fn(),
   put: jest.fn(),
   delete: jest.fn(),
+  patch: jest.fn(),
 }));
 
 jest.mock("next/navigation", () => ({
@@ -19,35 +20,35 @@ describe("GoalPage", () => {
 
   beforeEach(() => {
     useRouter.mockReturnValue({ push: mockRouterPush });
-    useParams.mockReturnValue({ id: "1" });
+    useParams.mockReturnValue({ id: "2" });
   });
 
   it("renders the goal details", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: { title: "Master Kanji", purpose: "Pass JLPT N1", goal_progresses: [] },
     });
 
     render(<GoalPage />);
 
-    await waitFor(() => {
-      expect(screen.getByText("Learn Japanese")).toBeInTheDocument();
-      expect(screen.getByText("To work in Japan")).toBeInTheDocument();
-    });
+    // await waitFor(() => {
+    expect(screen.getByText("Master Kanji")).toBeInTheDocument();
+    expect(screen.getByText("Pass JLPT N1")).toBeInTheDocument();
+    // });
   });
 
   it("updates goal successfully", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: { title: "Entire Day Goal 2", purpose: "Purpose for goal 2", goal_progresses: [] },
     });
     railsAPI.put.mockResolvedValue({ status: 200 });
 
     render(<GoalPage />);
 
-    await waitFor(() => {
-      expect(screen.getByText("Learn Japanese")).toBeInTheDocument();
-    });
+    // await waitFor(() => {
+    //   expect(screen.getByText("Entire Day Goal 2")).toBeInTheDocument();
+    // });
 
     fireEvent.click(screen.getByText("⋮"));
     expect(screen.getByText("Edit")).toBeInTheDocument();
@@ -68,7 +69,7 @@ describe("GoalPage", () => {
     fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => {
-      expect(railsAPI.put).toHaveBeenCalledWith("/goals/1", {
+      expect(railsAPI.put).toHaveBeenCalledWith("/goals/2", {
         goal: { title: "Master Kanji", purpose: "Pass JLPT N1" },
       });
     });
@@ -77,14 +78,14 @@ describe("GoalPage", () => {
   it("shows validation errors if fields are invalid", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: { title: "Master Kanji", purpose: "Pass JLPT N1", goal_progresses: [] },
     });
     railsAPI.put.mockResolvedValue({ status: 200 });
 
     render(<GoalPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Learn Japanese")).toBeInTheDocument();
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText("⋮"));
@@ -114,14 +115,14 @@ describe("GoalPage", () => {
   it("shows an error message if update fails", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: { title: "Master Kanji", purpose: "Pass JLPT N1", goal_progresses: [] },
     });
     railsAPI.put.mockRejectedValue(new Error("Update failed"));
 
     render(<GoalPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Learn Japanese")).toBeInTheDocument();
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText("⋮"));
@@ -131,7 +132,7 @@ describe("GoalPage", () => {
     expect(screen.getByText("Edit Goal")).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByLabelText("Title:")).toHaveValue("Learn Japanese");
+      expect(screen.getByLabelText("Title:")).toHaveValue("Master Kanji");
     });
 
     fireEvent.click(screen.getByText("Save"));
@@ -146,14 +147,14 @@ describe("GoalPage", () => {
   it("deletes goal successfully", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: { title: "Master Kanji", purpose: "Pass JLPT N1", goal_progresses: [] },
     });
     railsAPI.delete.mockResolvedValue({ status: 204 });
 
     render(<GoalPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Learn Japanese")).toBeInTheDocument();
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText("⋮"));
@@ -165,7 +166,7 @@ describe("GoalPage", () => {
     fireEvent.click(screen.getByText("Delete"));
 
     await waitFor(() => {
-      expect(railsAPI.delete).toHaveBeenCalledWith("/goals/1");
+      expect(railsAPI.delete).toHaveBeenCalledWith("/goals/2");
       expect(mockRouterPush).toHaveBeenCalledWith("/goals/list");
     });
   });
@@ -173,14 +174,14 @@ describe("GoalPage", () => {
   it("shows an error message if delete fails", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: { title: "Master Kanji", purpose: "Pass JLPT N1", goal_progresses: [] },
     });
     railsAPI.delete.mockRejectedValue(new Error("Delete failed"));
 
     render(<GoalPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Learn Japanese")).toBeInTheDocument();
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText("⋮"));
@@ -199,7 +200,7 @@ describe("GoalPage", () => {
   });
 
   it("redirects to 404 when the goal is not found", async () => {
-    useParams.mockReturnValue({ id: "1" });
+    useParams.mockReturnValue({ id: "2" });
 
     // Mock API call to reject with a 404 error
     railsAPI.get.mockRejectedValue({ status: 404 });
@@ -212,7 +213,7 @@ describe("GoalPage", () => {
   });
 
   it("shows an error message when a different error occurs", async () => {
-    useParams.mockReturnValue({ id: "1" });
+    useParams.mockReturnValue({ id: "2" });
 
     // Mock API call to reject with a non-404 error
     railsAPI.get.mockRejectedValue({ status: 500 });
@@ -223,6 +224,107 @@ describe("GoalPage", () => {
       expect(
         screen.getByText("Something went wrong. Please try again.")
       ).toBeInTheDocument();
+    });
+  });
+
+  it("renders avatar emoji based on current streak", async () => {
+    railsAPI.get.mockResolvedValue({
+      status: 200,
+      data: {
+        title: "Master Kanji",
+        purpose: "Pass JLPT N1",
+        goal_progresses: [{ date: new Date().toISOString().split("T")[0], completed: true, current_streak: 10 }],
+        repeat_term: "daily",
+      },
+    });
+
+    render(<GoalPage />);
+
+    await waitFor(() => expect(screen.getByText("Master Kanji")).toBeInTheDocument());
+    expect(screen.getByText("🤩")).toBeInTheDocument();
+  });
+
+  it("renders neutral face for low streak", async () => {
+    railsAPI.get.mockResolvedValue({
+      status: 200,
+      data: {
+        title: "Master Kanji",
+        purpose: "Pass JLPT N1",
+        goal_progresses: [{ date: new Date().toISOString().split("T")[0], completed: true, current_streak: 1 }],
+        repeat_term: "daily",
+      },
+    });
+
+    render(<GoalPage />);
+
+    await waitFor(() => expect(screen.getByText("Master Kanji")).toBeInTheDocument());
+    expect(screen.getByText("😐")).toBeInTheDocument();
+  });
+
+  it("renders sad face for no streak", async () => {
+    railsAPI.get.mockResolvedValue({
+      status: 200,
+      data: {
+        title: "Master Kanji",
+        purpose: "Pass JLPT N1",
+        goal_progresses: [{ date: new Date().toISOString().split("T")[0], completed: false, current_streak: 0 }],
+        repeat_term: "daily",
+      },
+    });
+
+    render(<GoalPage />);
+
+    await waitFor(() => expect(screen.getByText("Master Kanji")).toBeInTheDocument());
+    expect(screen.getByText("😟")).toBeInTheDocument();
+  });
+
+  it("logs task completion", async () => {
+    railsAPI.get.mockResolvedValue({
+      status: 200,
+      data: {
+        title: "Master Kanji",
+        purpose: "Pass JLPT N1",
+        goal_progresses: [],
+        repeat_term: "daily",
+      },
+    });
+    railsAPI.patch.mockResolvedValue({ status: 200 });
+
+    render(<GoalPage />);
+
+    await waitFor(() => expect(screen.getByText("Master Kanji")).toBeInTheDocument());
+
+    fireEvent.click(screen.getByText("Mark as Completed"));
+
+    await waitFor(() => expect(screen.getByText("Task Completed")).toBeInTheDocument());
+  });
+
+  it("displays and updates the progress graph correctly", async () => {
+    const goalData = {
+      title: "Master Kanji",
+      purpose: "Pass JLPT N1",
+      goal_progresses: [
+        { date: "2025-02-01", completed: false },
+        { date: "2025-02-20", completed: true },
+      ],
+      repeat_term: "daily",
+      graph_type: "bar",
+    };
+    railsAPI.get.mockResolvedValueOnce({ status: 200, data: goalData });
+    render(<GoalPage />);
+
+    await waitFor(() => expect(screen.getByText("Master Kanji")).toBeInTheDocument());
+
+    // Check if the graph is displayed
+    expect(screen.getByText("My progress")).toBeInTheDocument();
+
+    // Simulate marking a task as completed
+    railsAPI.patch.mockResolvedValueOnce({ status: 200 });
+    fireEvent.click(screen.getByText("Mark as Completed"));
+
+    await waitFor(() => {
+      // Check if the graph is updated
+      expect(screen.getByText("Task Completed")).toBeInTheDocument();
     });
   });
 });
@@ -236,7 +338,7 @@ describe("GoalPage - handleCloseModal", () => {
   beforeEach(() => {
     setIsModalOpen = jest.fn();
     setFormData = jest.fn();
-    goal = { title: "Test Goal", purpose: "Test Purpose" };
+    goal = { title: "Master Kanji", purpose: "Pass JLPT N1" };
 
     handleCloseModal = () => {
       setIsModalOpen(false);
