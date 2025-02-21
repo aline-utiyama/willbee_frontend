@@ -9,15 +9,21 @@ jest.mock('next/navigation', () => ({
 }));
 
 describe('GoalsList', () => {
+  const mockRouterPush = jest.fn();
+
+  beforeEach(() => {
+    useRouter.mockReturnValue({ push: mockRouterPush });
+  });
+
   it('renders the goals list page', () => {
     render(<GoalsList />);
-    expect(screen.getByText('My goals')).toBeInTheDocument();
+    expect(screen.getByText('My Goals')).toBeInTheDocument();
   });
 
   it('fetches and displays goals', async () => {
     const goals = [
-      { id: 1, title: 'Goal 1', graph_type: 'bar' },
-      { id: 2, title: 'Goal 2', graph_type: 'line' },
+      { id: 1, title: 'Entire Day Goal 1' },
+      { id: 2, title: 'Entire Day Goal 2' },
     ];
     railsAPI.get.mockResolvedValue({ data: goals });
 
@@ -42,8 +48,8 @@ describe('GoalsList', () => {
 
   it('navigates to the correct goal page when a goal is clicked', async () => {
     const goals = [
-      { id: 1, title: 'Goal 1', graph_type: 'bar' },
-      { id: 2, title: 'Goal 2', graph_type: 'line' },
+      { id: 1, title: 'Entire Day Goal 1' },
+      { id: 2, title: 'Entire Day Goal 2' },
     ];
     const push = jest.fn();
     useRouter.mockImplementation(() => ({ push }));
@@ -57,10 +63,10 @@ describe('GoalsList', () => {
       });
     });
 
-    fireEvent.click(screen.getByText('Goal 1'));
+    fireEvent.click(screen.getByText('Entire Day Goal 1'));
     expect(push).toHaveBeenCalledWith('/goals/1');
 
-    fireEvent.click(screen.getByText('Goal 2'));
+    fireEvent.click(screen.getByText('Entire Day Goal 2'));
     expect(push).toHaveBeenCalledWith('/goals/2');
   });
 });

@@ -6,7 +6,7 @@ import railsAPI from "@/services/rails-api";
 
 const GoalsList = () => {
   const [goals, setGoals] = useState([]);
-  const [errors, setErrors] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const fetchGoals = async () => {
@@ -14,17 +14,17 @@ const GoalsList = () => {
       const response = await railsAPI.get(`/goals`);
       setGoals(response.data);
     } catch (err) {
-      setErrors("Failed to fetch goals data");
+      setError("Failed to fetch goals data");
     }
   };
   useEffect(() => {
     fetchGoals();
   }, []);
 
-  if (errors) {
+  if (error) {
     return (
       <div className="h-screen flex flex-col items-center justify-center">
-        <p className="text-red-500">{errors}</p>
+        <p className="text-red-500">{error}</p>
         <a
           href="/"
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
