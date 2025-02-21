@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import railsAPI from "@/services/rails-api";
+import GoalPlanCard from "@/app/components/GoalPlanCard";
 
 const GoalPlansList = () => {
   const [goalPlans, setGoalPlans] = useState([]);
@@ -106,13 +107,11 @@ const GoalPlansList = () => {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 mx-auto flex max-w-2xl items-center py-4 px-2">
           {goalPlans &&
             goalPlans.map((goalPlan) => (
-              <div
+              <GoalPlanCard
                 key={goalPlan.id}
+                goalPlan={goalPlan}
                 onClick={() => router.push(`/goal-plans/${goalPlan.id}`)}
-                className="cursor-pointer"
-              >
-                {goalPlan.title}
-              </div>
+              />
             ))}
         </div>
       </div>
