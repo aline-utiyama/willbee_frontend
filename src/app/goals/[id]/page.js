@@ -6,12 +6,19 @@ import railsAPI from "@/services/rails-api";
 import { useRouter } from "next/navigation";
 import GoalProgressBarChart from "@/app/components/BarChart";
 import GoalProgressHeatmap from "@/app/components/HeatMap";
+import Spinner from "@/app/components/Spinner";
 
-const getAvatarEmoji = (currentStreak) => {
-  if (currentStreak >= 10) return "🤩"; // Happy face for high streak
-  if (currentStreak >= 5) return "😊"; // Slightly happy face for medium streak
-  if (currentStreak >= 1) return "😐"; // Neutral face for low streak
-  return "😟"; // Sad face for no streak
+const getAvatar = (currentStreak) => {
+  if (currentStreak >= 10) return getAvatarUrl("stars", "smileLol"); // Happy face for high streak
+  if (currentStreak >= 5) return getAvatarUrl("cute", "smileTeeth"); // Slightly happy face for medium streak
+  if (currentStreak >= 1) return getAvatarUrl("cute", "lilSmile"); // Neutral face for low streak
+  return getAvatarUrl("tearDrop", "shy"); // Sad face for no streak
+};
+
+const getAvatarUrl = (eyes, mouth) => {
+  return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=Adrian&radius=40&backgroundColor=fcbc34&eyes=${encodeURIComponent(
+    eyes
+  )}&mouth=${encodeURIComponent(mouth)}`;
 };
 
 const GoalPage = () => {
@@ -67,8 +74,11 @@ const GoalPage = () => {
 
   const checkGoalProgress = (goalProgresses) => {
     const record = goalProgresses.find((entry) => entry.date === dateToday);
-    setIsCompleted(record.completed);
-    setCurrentStreak(record.current_streak);
+
+    if (record) {
+      setIsCompleted(record.completed);
+      setCurrentStreak(record.current_streak);
+    }
   };
 
   // Close dropdown when clicking outside
@@ -190,29 +200,27 @@ const GoalPage = () => {
   };
 
   if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (error) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center">
-        <p className="text-red-500">{error}</p>
-        <a
-          href="/"
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Go Home
-        </a>
+      <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
+        <div className="md:mx-auto md:w-full md:max-w-lg relative">
+          <p className="text-red-500">{error}</p>
+          <a
+            href="/"
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Go Home
+          </a>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
+    <div className="mt-6 md:mx-auto md:w-full md:max-w-lg">
       <div className="md:mx-auto md:w-full md:max-w-lg relative">
         <div>
           <nav aria-label="Breadcrumb">
@@ -317,9 +325,13 @@ const GoalPage = () => {
             )}
           </div>
         </div>
-        {/* Avatar Emoji */}
-        <div className="text-center py-8">
-          <span className="text-6xl">{getAvatarEmoji(currentStreak)}</span>
+        {/* Avatar */}
+        <div className="flex justify-center py-8">
+          <img
+            src={getAvatar(currentStreak)}
+            alt="avatar"
+            className="mx-auto w-1/2"
+          />
         </div>
         <div className="mt-6 ">
           <dl className="divide-y divide-gray-100">
@@ -373,10 +385,11 @@ const GoalPage = () => {
             </p>
             <button
               onClick={handleMarkTodayAsCompleted}
-              className={`px-4 py-2 rounded text-sm ${isCompleted
-                ? "bg-gray-400 text-white font-bold cursor-not-allowed"
-                : "bg-black text-white font-bold hover:bg-gray-600"
-                }`}
+              className={`px-4 py-2 rounded text-sm ${
+                isCompleted
+                  ? "bg-gray-400 text-white font-bold cursor-not-allowed"
+                  : "bg-black text-white font-bold hover:bg-gray-600"
+              }`}
               disabled={isCompleted} // Disable button if task is completed
             >
               {isCompleted ? "Task Completed" : "Mark as Completed"}
