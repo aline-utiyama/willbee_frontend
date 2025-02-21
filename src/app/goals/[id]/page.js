@@ -6,10 +6,28 @@ import railsAPI from "@/services/rails-api";
 import { useRouter } from "next/navigation";
 import GoalProgressBarChart from "@/app/components/BarChart";
 import GoalProgressHeatmap from "@/app/components/HeatMap";
+import Spinner from "@/app/components/Spinner";
+
+const getAvatar = (currentStreak) => {
+  if (currentStreak >= 10) return getAvatarUrl("stars", "smileLol"); // Happy face for high streak
+  if (currentStreak >= 5) return getAvatarUrl("cute", "smileTeeth"); // Slightly happy face for medium streak
+  if (currentStreak >= 1) return getAvatarUrl("cute", "lilSmile"); // Neutral face for low streak
+  return getAvatarUrl("tearDrop", "shy"); // Sad face for no streak
+};
+
+const getAvatarUrl = (eyes, mouth) => {
+  return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=Adrian&radius=40&backgroundColor=fcbc34&eyes=${encodeURIComponent(
+    eyes
+  )}&mouth=${encodeURIComponent(mouth)}`;
+};
 
 const GoalPage = () => {
   const { id } = useParams();
-  const [goal, setGoal] = useState({ title: "", purpose: "" });
+  const [goal, setGoal] = useState({
+    title: "",
+    purpose: "",
+    goal_progresses: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,6 +40,10 @@ const GoalPage = () => {
 
   const dropdownRef = useRef(null);
   const router = useRouter();
+  const [currentStreak, setCurrentStreak] = useState(0); // Add current streak state
+  const [isCompleted, setIsCompleted] = useState(false); // Add isCompleted state
+  const [progressUpdated, setProgressUpdated] = useState(false);
+  const dateToday = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     if (!id) return;
@@ -35,6 +57,7 @@ const GoalPage = () => {
           const goalData = response.data;
           setGoal(goalData);
           setFormData({ title: goalData.title, purpose: goalData.purpose });
+          checkGoalProgress(goalData.goal_progresses);
           setLoading(false);
         }
       } catch (err) {
@@ -46,9 +69,17 @@ const GoalPage = () => {
         }
       }
     };
-
     fetchGoalData();
-  }, [id]);
+  }, [id, progressUpdated]);
+
+  const checkGoalProgress = (goalProgresses) => {
+    const record = goalProgresses.find((entry) => entry.date === dateToday);
+
+    if (record) {
+      setIsCompleted(record.completed);
+      setCurrentStreak(record.current_streak);
+    }
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -143,34 +174,53 @@ const GoalPage = () => {
     }
   };
 
+  const handleMarkTodayAsCompleted = async () => {
+    try {
+      const response = await railsAPI.patch(`/goal_progresses/complete_today`, {
+        goal_id: id,
+        date_today: dateToday,
+      });
+      if (response.status === 200) {
+        setProgressUpdated(true);
+        setIsCompleted(true); // Disable button after completion
+      }
+    } catch (err) {
+      setError("Failed to mark task as completed. Please try again.");
+    }
+  };
+
   const validateMinLength = (text, minLength = 2) => {
     return text.trim().length >= minLength;
   };
 
+  const repeatMapping = {
+    daily: "Every Day",
+    weekly: "Every Week",
+    monthly: "Every Month",
+  };
+
   if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (error) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center">
-        <p className="text-red-500">{error}</p>
-        <a
-          href="/"
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Go Home
-        </a>
+      <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
+        <div className="md:mx-auto md:w-full md:max-w-lg relative">
+          <p className="text-red-500">{error}</p>
+          <a
+            href="/"
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Go Home
+          </a>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
+    <div className="mt-6 md:mx-auto md:w-full md:max-w-lg">
       <div className="md:mx-auto md:w-full md:max-w-lg relative">
         <div>
           <nav aria-label="Breadcrumb">
@@ -275,16 +325,76 @@ const GoalPage = () => {
             )}
           </div>
         </div>
-        <div className="py-8">
-          <ol>
-            <li>{goal.purpose}</li>
-            <li>{goal.repeat_term}</li>
+        {/* Avatar */}
+        <div className="flex justify-center py-8">
+          <img
+            src={getAvatar(currentStreak)}
+            alt="avatar"
+            className="mx-auto w-1/2"
+          />
+        </div>
+        <div className="mt-6 ">
+          <dl className="divide-y divide-gray-100">
+            <div className="px-4 py-2 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0">
+              <dt className="text-sm/6 font-medium text-gray-900">Purpose:</dt>
+              <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-4 sm:mt-0">
+                {goal.purpose}
+              </dd>
+            </div>
+            <div className="px-4 py-2 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0">
+              <dt className="text-sm/6 font-medium text-gray-900">Repeat:</dt>
+              <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-4 sm:mt-0">
+                {repeatMapping[goal.repeat_term]}
+              </dd>
+            </div>
             {goal.duration === "specific_duration" && (
-              <li>
-                {goal.duration_length} {goal.duration_measure}
-              </li>
+              <div className="px-4 py-2 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0">
+                <dt className="text-sm/6 font-medium text-gray-900">
+                  Duration:
+                </dt>
+                <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-4 sm:mt-0">
+                  {goal.duration_length} {goal.duration_measure}
+                </dd>
+              </div>
             )}
-          </ol>
+            {goal.advice && (
+              <div className="px-4 py-2 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0">
+                <dt className="text-sm/6 font-medium text-gray-900">Advice:</dt>
+                <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-4 sm:mt-0">
+                  {goal.advice}
+                </dd>
+              </div>
+            )}
+          </dl>
+        </div>
+        <div className="text-center py-8 justify-center flex flex-col gap-2">
+          <p className="text-xl">My progress</p>
+          {/* Progress graph */}
+          <div className="flex justify-center pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
+            {goal.graph_type == "bar" && goal.goal_progresses && (
+              <GoalProgressBarChart goalData={goal} />
+            )}
+            {goal.graph_type == "dot" && goal.goal_progresses && (
+              <GoalProgressHeatmap goalData={goal} />
+            )}
+          </div>
+          {/* Mark as Completed Button */}
+          <div className="mt-6 px-4 py-4 flex flex-col rounded-md border-t border-gray-200 bg-white shadow-md">
+            <p className="mb-6 text-base font-bold text-left">
+              Did you complete your task today?
+            </p>
+            <button
+              onClick={handleMarkTodayAsCompleted}
+              className={`px-4 py-2 rounded text-sm ${
+                isCompleted
+                  ? "bg-gray-400 text-white font-bold cursor-not-allowed"
+                  : "bg-black text-white font-bold hover:bg-gray-600"
+              }`}
+              disabled={isCompleted} // Disable button if task is completed
+            >
+              {isCompleted ? "Task Completed" : "Mark as Completed"}
+            </button>
+          </div>
         </div>
         {/* Edit Modal */}
         {isModalOpen && (
@@ -375,14 +485,6 @@ const GoalPage = () => {
             </div>
           </div>
         )}
-        <div className="flex justify-center pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
-          {goal.graph_type == "bar" && goal.goal_progresses && (
-            <GoalProgressBarChart goalData={goal} />
-          )}
-          {goal.graph_type == "dot" && goal.goal_progresses && (
-            <GoalProgressHeatmap goalData={goal} />
-          )}
-        </div>
       </div>
     </div>
   );
