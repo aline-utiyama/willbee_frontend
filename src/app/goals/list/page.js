@@ -6,7 +6,7 @@ import railsAPI from "@/services/rails-api";
 
 const GoalsList = () => {
   const [goals, setGoals] = useState([]);
-  const [errors, setErrors] = useState("");
+  const [error, setError] = useState(null);
   const router = useRouter();
 
   const fetchGoals = async () => {
@@ -14,7 +14,7 @@ const GoalsList = () => {
       const response = await railsAPI.get(`/goals`);
       setGoals(response.data);
     } catch (err) {
-      setErrors("Failed to fetch goals data");
+      setError("Failed to fetch goals data");
     }
   };
   useEffect(() => {
@@ -75,7 +75,7 @@ const GoalsList = () => {
         </ol>
       </nav>
 
-      {errors && <p style={{ color: "red" }}>{errors}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 mx-auto flex max-w-2xl items-center py-4 px-2">
         {Array.isArray(goals) &&
           goals.map((goal) => (
