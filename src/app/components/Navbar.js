@@ -68,25 +68,6 @@ export default function Navbar() {
                 />
               </div>
             </Link>
-            {/* Use the section below if we add any item to the nav menu */}
-            {/* <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? "page" : undefined}
-                    className={classNames(
-                      item.current
-                        ? "flex-1 border-b-2 border-transparent px-1 py-4 text-base font-medium whitespace-nowrap text-gray-900 border-indigo-600 text-indigo-600"
-                        : "flex-1 border-b-2 border-transparent px-1 py-4 text-base font-medium whitespace-nowrap text-gray-900"
-                    )}
-                  >
-                    {item.name}
-                  </a>
-                ))}
-              </div>
-            </div> */}
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {showAuthButtons ? (
@@ -144,10 +125,10 @@ export default function Navbar() {
                     </MenuItem>
                     <MenuItem>
                       <a
-                        href="/profile"
+                        href="/goal-plans/list"
                         className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                       >
-                        My Profile
+                        Goal Plans
                       </a>
                     </MenuItem>
                     <MenuItem>
@@ -155,13 +136,12 @@ export default function Navbar() {
                         href="/settings"
                         className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                       >
-                        Settings
+                        User Settings
                       </a>
                     </MenuItem>
                     <MenuItem>
                       <div className="block px-4 py-2">
                         <button
-                          // className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                           className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                           onClick={handleLogout}
                         >
