@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import railsAPI from "@/services/rails-api";
+import GoalPlanCard from "@/app/components/GoalPlanCard";
 
 const GoalPlansList = () => {
   const [goalPlans, setGoalPlans] = useState([]);
-  const [errors, setErrors] = useState("");
+  const [error, setError] = useState("");
   const searchParams = useSearchParams();
   const category = searchParams.get("category") || "";
   const router = useRouter();
@@ -17,7 +18,7 @@ const GoalPlansList = () => {
       });
       setGoalPlans(response.data);
     } catch (err) {
-      setErrors("Failed to fetch goals data");
+      setError("Failed to fetch goal plans data");
     }
   };
   useEffect(() => {
@@ -102,17 +103,15 @@ const GoalPlansList = () => {
           </ol>
         </nav>
 
-        {errors && <p style={{ color: "red" }}>{errors}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 mx-auto flex max-w-2xl items-center py-4 px-2">
           {goalPlans &&
             goalPlans.map((goalPlan) => (
-              <div
+              <GoalPlanCard
                 key={goalPlan.id}
+                goalPlan={goalPlan}
                 onClick={() => router.push(`/goal-plans/${goalPlan.id}`)}
-                className="cursor-pointer"
-              >
-                {goalPlan.title}
-              </div>
+              />
             ))}
         </div>
       </div>

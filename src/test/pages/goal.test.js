@@ -7,6 +7,7 @@ jest.mock("@/services/rails-api", () => ({
   get: jest.fn(),
   put: jest.fn(),
   delete: jest.fn(),
+  patch: jest.fn(),
 }));
 
 jest.mock("next/navigation", () => ({
@@ -25,7 +26,11 @@ describe("GoalPage", () => {
   it("renders the goal details", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: {
+        title: "Learn Japanese",
+        purpose: "To work in Japan",
+        goal_progresses: [],
+      },
     });
 
     render(<GoalPage />);
@@ -39,7 +44,11 @@ describe("GoalPage", () => {
   it("updates goal successfully", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: {
+        title: "Learn Japanese",
+        purpose: "To work in Japan",
+        goal_progresses: [],
+      },
     });
     railsAPI.put.mockResolvedValue({ status: 200 });
 
@@ -77,7 +86,11 @@ describe("GoalPage", () => {
   it("shows validation errors if fields are invalid", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: {
+        title: "Learn Japanese",
+        purpose: "To work in Japan",
+        goal_progresses: [],
+      },
     });
     railsAPI.put.mockResolvedValue({ status: 200 });
 
@@ -114,7 +127,11 @@ describe("GoalPage", () => {
   it("shows an error message if update fails", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: {
+        title: "Learn Japanese",
+        purpose: "To work in Japan",
+        goal_progresses: [],
+      },
     });
     railsAPI.put.mockRejectedValue(new Error("Update failed"));
 
@@ -146,7 +163,11 @@ describe("GoalPage", () => {
   it("deletes goal successfully", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: {
+        title: "Learn Japanese",
+        purpose: "To work in Japan",
+        goal_progresses: [],
+      },
     });
     railsAPI.delete.mockResolvedValue({ status: 204 });
 
@@ -173,7 +194,11 @@ describe("GoalPage", () => {
   it("shows an error message if delete fails", async () => {
     railsAPI.get.mockResolvedValue({
       status: 200,
-      data: { title: "Learn Japanese", purpose: "To work in Japan" },
+      data: {
+        title: "Learn Japanese",
+        purpose: "To work in Japan",
+        goal_progresses: [],
+      },
     });
     railsAPI.delete.mockRejectedValue(new Error("Delete failed"));
 
@@ -223,6 +248,152 @@ describe("GoalPage", () => {
       expect(
         screen.getByText("Something went wrong. Please try again.")
       ).toBeInTheDocument();
+    });
+  });
+
+  it("renders avatar emoji based on current streak", async () => {
+    railsAPI.get.mockResolvedValue({
+      status: 200,
+      data: {
+        title: "Master Kanji",
+        purpose: "Pass JLPT N1",
+        goal_progresses: [
+          {
+            date: new Date().toISOString().split("T")[0],
+            completed: true,
+            current_streak: 10,
+          },
+        ],
+        repeat_term: "daily",
+      },
+    });
+
+    render(<GoalPage />);
+
+    await waitFor(() =>
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument()
+    );
+
+    const avatarImage = screen.getByRole("img", { name: /avatar/i });
+    expect(avatarImage).toHaveAttribute(
+      "src",
+      "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Adrian&radius=40&backgroundColor=fcbc34&eyes=stars&mouth=smileLol"
+    );
+  });
+
+  it("renders neutral face for low streak", async () => {
+    railsAPI.get.mockResolvedValue({
+      status: 200,
+      data: {
+        title: "Master Kanji",
+        purpose: "Pass JLPT N1",
+        goal_progresses: [
+          {
+            date: new Date().toISOString().split("T")[0],
+            completed: true,
+            current_streak: 1,
+          },
+        ],
+        repeat_term: "daily",
+      },
+    });
+
+    render(<GoalPage />);
+
+    await waitFor(() =>
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument()
+    );
+
+    const avatarImage = screen.getByRole("img", { name: /avatar/i });
+    expect(avatarImage).toHaveAttribute(
+      "src",
+      "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Adrian&radius=40&backgroundColor=fcbc34&eyes=cute&mouth=lilSmile"
+    );
+  });
+
+  it("renders sad face for no streak", async () => {
+    railsAPI.get.mockResolvedValue({
+      status: 200,
+      data: {
+        title: "Master Kanji",
+        purpose: "Pass JLPT N1",
+        goal_progresses: [
+          {
+            date: new Date().toISOString().split("T")[0],
+            completed: false,
+            current_streak: 0,
+          },
+        ],
+        repeat_term: "daily",
+      },
+    });
+
+    render(<GoalPage />);
+
+    await waitFor(() =>
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument()
+    );
+
+    const avatarImage = screen.getByRole("img", { name: /avatar/i });
+    expect(avatarImage).toHaveAttribute(
+      "src",
+      "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Adrian&radius=40&backgroundColor=fcbc34&eyes=tearDrop&mouth=shy"
+    );
+  });
+
+  it("logs task completion", async () => {
+    railsAPI.get.mockResolvedValue({
+      status: 200,
+      data: {
+        title: "Master Kanji",
+        purpose: "Pass JLPT N1",
+        goal_progresses: [],
+        repeat_term: "daily",
+      },
+    });
+    railsAPI.patch.mockResolvedValue({ status: 200 });
+
+    render(<GoalPage />);
+
+    await waitFor(() =>
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument()
+    );
+
+    fireEvent.click(screen.getByText("Mark as Completed"));
+
+    await waitFor(() =>
+      expect(screen.getByText("Task Completed")).toBeInTheDocument()
+    );
+  });
+
+  it("displays and updates the progress graph correctly", async () => {
+    const goalData = {
+      title: "Master Kanji",
+      purpose: "Pass JLPT N1",
+      goal_progresses: [
+        { date: "2025-02-01", completed: false },
+        { date: "2025-02-20", completed: true },
+      ],
+      repeat_term: "daily",
+      graph_type: "bar",
+    };
+    railsAPI.get.mockResolvedValueOnce({ status: 200, data: goalData });
+    render(<GoalPage />);
+
+    await waitFor(() =>
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument()
+    );
+
+    // Check if the graph is displayed
+    expect(screen.getByText("My progress")).toBeInTheDocument();
+
+    // Simulate marking a task as completed
+    railsAPI.patch.mockResolvedValueOnce({ status: 200 });
+    fireEvent.click(screen.getByText("Mark as Completed"));
+
+    await waitFor(() => {
+      // Check if the graph is updated
+      expect(screen.getByText("Task Completed")).toBeInTheDocument();
     });
   });
 });
