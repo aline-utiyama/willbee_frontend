@@ -6,11 +6,8 @@ import railsAPI from "@/services/rails-api";
 
 const GoalsList = () => {
   const [goals, setGoals] = useState([]);
-<<<<<<< HEAD
-  const [error, setError] = useState("");
-=======
   const [error, setError] = useState(null);
->>>>>>> main
+
   const router = useRouter();
 
   const fetchGoals = async () => {
@@ -41,17 +38,8 @@ const GoalsList = () => {
 
   return (
     <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
-<<<<<<< HEAD
       <h1 className="text-2xl font-bold text-gray-900 mb-4">My Goals</h1>
-      <div className="space-y-4">
-        {goals.map((goal) => (
-          <GoalCard
-            key={goal.id}
-            goal={goal}
-            onClick={() => router.push(`/goals/${goal.id}`)}
-          />
-        ))}
-=======
+
       <nav aria-label="Breadcrumb">
         <ol
           role="list"
@@ -105,18 +93,14 @@ const GoalsList = () => {
       </nav>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 mx-auto flex max-w-2xl items-center py-4 px-2">
-        {Array.isArray(goals) &&
-          goals.map((goal) => (
-            <div
-              key={goal.id}
-              onClick={() => router.push(`/goals/${goal.id}`)}
-              className="cursor-pointer"
-            >
-              <GoalCard title={goal.title} graph_type={goal.graph_type} />
-            </div>
-          ))}
->>>>>>> main
+      <div className="space-y-4 justify-self-center">
+        {goals.map((goal) => (
+          <GoalCard
+            key={goal.id}
+            goal={goal}
+            onClick={() => router.push(`/goals/${goal.id}`)}
+          />
+        ))}
       </div>
     </div>
   );
