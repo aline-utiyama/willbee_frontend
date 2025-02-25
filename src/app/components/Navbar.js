@@ -9,7 +9,7 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, BellIcon, XMarkIcon, ClipboardIcon, CogIcon, TrophyIcon, HomeIcon, ChatBubbleBottomCenterIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -30,6 +30,7 @@ export default function Navbar() {
   const pathname = usePathname(); // Get the current path
   const showAuthButtons = ["/", "/login", "/signup"].includes(pathname); // Check if we are on a page that should show login/signup
   const router = useRouter();
+  const username = "John Doe"; // Replace with actual username logic
 
   const handleLogout = async () => {
     logout(() => {
@@ -113,36 +114,78 @@ export default function Navbar() {
                   </div>
                   <MenuItems
                     transition
-                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-2 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                    className="fixed flex flex-col h-min inset-0 z-10 m-5 bg-white py-2 px-3 rounded-md ring-1 shadow-lg ring-black/5 transition focus:outline-none data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in gap-4"
                   >
+                    <div className="px-2 py-4 flex items-center">
+                      <img
+                        alt=""
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        className="size-10 rounded-full"
+                      />
+                      <p className="ml-3 text-sm text-gray-900 font-semibold">{username}</p>
+                    </div>
+                    <div className="border-t border-gray-200 gap-4 justify-center items-center">
+                      <MenuItem>
+                        <a
+                          href="/dashboard"
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <HomeIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          Home
+                        </a>
+                      </MenuItem>
+                      <MenuItem>
+                        <a
+                          href="/goals/list"
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <TrophyIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          My Goals
+                        </a>
+                      </MenuItem>
+                      <MenuItem>
+                        <a
+                          href="/goal-plans/list"
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <ClipboardIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          Goal Plans
+                        </a>
+                      </MenuItem>
+                      <MenuItem>
+                        <a
+                          href="/settings"
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <CogIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          User Settings
+                        </a>
+                      </MenuItem>
+                    </div>
+                    <div className="border-t border-gray-200 gap-4 justify-center items-center">
+                      <MenuItem>
+                        <a
+                          href="#"
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <ChatBubbleBottomCenterIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          WillBlog
+                        </a>
+                      </MenuItem>
+                      <MenuItem>
+                        <a
+                          href="#"
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <InformationCircleIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          Help & Support
+                        </a>
+                      </MenuItem>
+                    </div>
                     <MenuItem>
-                      <a
-                        href="/goals/list"
-                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                      >
-                        My Goals
-                      </a>
-                    </MenuItem>
-                    <MenuItem>
-                      <a
-                        href="/goal-plans/list"
-                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                      >
-                        Goal Plans
-                      </a>
-                    </MenuItem>
-                    <MenuItem>
-                      <a
-                        href="/settings"
-                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                      >
-                        User Settings
-                      </a>
-                    </MenuItem>
-                    <MenuItem>
-                      <div className="block px-4 py-2">
+                      <div className="block px-2 py-2">
                         <button
-                          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                           onClick={handleLogout}
                         >
                           Sign out
@@ -154,8 +197,8 @@ export default function Navbar() {
               </>
             )}
           </div>
-        </div>
-      </div>
+        </div >
+      </div >
 
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pt-2 pb-3">
@@ -177,6 +220,6 @@ export default function Navbar() {
           ))}
         </div>
       </DisclosurePanel>
-    </Disclosure>
+    </Disclosure >
   );
 }
