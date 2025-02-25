@@ -10,9 +10,11 @@ const GoalProgressBarChart = ({ goalData }) => {
     import("d3").then((d3) => {
       if (!goalData?.goal_progresses) return;
 
-      const width = 500,
+      const numDays = 7;
+      const barWidth = 65;
+      const width = numDays * barWidth,
         height = 200,
-        margin = { top: 20, right: 20, bottom: 50, left: 50 };
+        margin = { top: 20, right: 10, bottom: 50, left: 30 };
 
       d3.select(svgRef.current).selectAll("*").remove();
       const svg = d3

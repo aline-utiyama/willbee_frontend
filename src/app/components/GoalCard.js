@@ -49,7 +49,7 @@ const GoalCard = ({ goal, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="cursor-pointer bg-white shadow-md rounded-lg p-6 px-10 flex flex-col justify-items-start gap-3 hover:bg-gray-100"
+      className="cursor-pointer bg-white shadow-md rounded-lg p-6 px-10 flex flex-col  gap-3 hover:bg-gray-100"
     >
       <div className="flex items-center justify-between">
         <div className="flex flex-col ml-4">
