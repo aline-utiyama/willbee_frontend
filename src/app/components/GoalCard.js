@@ -23,10 +23,10 @@ const GoalCard = ({ goal, onClick }) => {
   };
 
   const getProgressColor = (streak) => {
-    if (streak >= 7) {
+    if (streak >= 5) {
       return "green";
-    } else if (streak >= 3) {
-      return "yellow";
+    } else if (streak >= 1) {
+      return "orange";
     } else {
       return "red";
     }

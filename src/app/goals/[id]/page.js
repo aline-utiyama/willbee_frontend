@@ -367,10 +367,10 @@ const GoalPage = () => {
             )}
           </dl>
         </div>
-        <div className="text-center py-8 justify-center flex flex-col gap-2">
+        <div className="text-center py-8 justify-center align-middle flex flex-col gap-2">
           <p className="text-xl">My progress</p>
           {/* Progress graph */}
-          <div className="flex justify-center pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
+          <div className="flex justify-center items-center pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
             {goal.graph_type == "bar" && goal.goal_progresses && (
               <GoalProgressBarChart goalData={goal} />
             )}
@@ -385,11 +385,10 @@ const GoalPage = () => {
             </p>
             <button
               onClick={handleMarkTodayAsCompleted}
-              className={`px-4 py-2 rounded text-sm ${
-                isCompleted
-                  ? "bg-gray-400 text-white font-bold cursor-not-allowed"
-                  : "bg-black text-white font-bold hover:bg-gray-600"
-              }`}
+              className={`px-4 py-2 rounded text-sm ${isCompleted
+                ? "bg-gray-400 text-white font-bold cursor-not-allowed"
+                : "bg-black text-white font-bold hover:bg-gray-600"
+                }`}
               disabled={isCompleted} // Disable button if task is completed
             >
               {isCompleted ? "Task Completed" : "Mark as Completed"}
