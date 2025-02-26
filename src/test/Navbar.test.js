@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import Navbar from "@/app/components/Navbar";
 import { usePathname, useRouter } from "next/navigation";
+import { useNotifications } from "@/app/context/NotificationProvider";
 import { logout } from "@/app/actions/auth";
 
 // Mock Next.js hooks
@@ -11,6 +12,10 @@ jest.mock("next/navigation", () => ({
 
 jest.mock("@/app/actions/auth", () => ({
   logout: jest.fn(),
+}));
+
+jest.mock("@/app/context/NotificationProvider", () => ({
+  useNotifications: jest.fn(),
 }));
 
 describe("Navbar Component", () => {
@@ -25,6 +30,16 @@ describe("Navbar Component", () => {
 
   it("renders the Navbar with profile and logout button when logged in", () => {
     usePathname.mockReturnValue("/dashboard");
+
+    // Mock notifications
+    useNotifications.mockReturnValue({
+      notifications: [
+        { id: 1, seen: false },
+        { id: 2, seen: true },
+      ],
+      removeNotification: jest.fn(),
+      markNotificationAsRead: jest.fn(),
+    });
 
     render(<Navbar />);
 
