@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import railsAPI from "@/services/rails-api";
 import Notification from "@/app/components/Notification";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import Spinner from "@/app/components/Spinner";
 
 const CATEGORIES = [
   "Fitness",
@@ -26,12 +27,18 @@ const GoalPlansCreatePage = () => {
   const [duration, setDuration] = useState("specific_duration");
   const [durationLength, setDurationLength] = useState(30);
   const [durationMeasure, setDurationMeasure] = useState("minutes");
+  const [image, setImage] = useState(null);
   const [notification, setNotification] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   // Error state
   const [errors, setErrors] = useState({});
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+  };
 
   // Handle goal Plan creation
   const handleGoalPlanCreate = async (e) => {
@@ -64,26 +71,31 @@ const GoalPlansCreatePage = () => {
     }
 
     if (Object.keys(formErrors).length > 0) {
+      setLoading(false);
       setErrors(formErrors);
       return; // Don't submit the form if there are errors
     }
 
-    const goalPlanData = {
-      title,
-      purpose,
-      advice,
-      category,
-      repeat_term: repeatTerm,
-      repeat_time: repeatTime,
-      duration,
-      duration_length: duration === "specific_duration" ? durationLength : null,
-      duration_measure:
-        duration === "specific_duration" ? durationMeasure : null,
-    };
+    // Create FormData object
+    const formData = new FormData();
+    formData.append("goal_plan[title]", title);
+    formData.append("goal_plan[purpose]", purpose);
+    formData.append("goal_plan[advice]", advice);
+    formData.append("goal_plan[category]", category);
+    formData.append("goal_plan[repeat_term]", repeatTerm);
+    formData.append("goal_plan[repeat_time]", repeatTime);
+    formData.append("goal_plan[duration]", duration);
+    if (duration === "specific_duration") {
+      formData.append("goal_plan[duration_length]", durationLength);
+      formData.append("goal_plan[duration_measure]", durationMeasure);
+    }
+    if (image) {
+      formData.append("goal_plan[image]", image); // Append the image file
+    }
 
     try {
-      const response = await railsAPI.post("/goal_plans", {
-        goal_plan: goalPlanData,
+      const response = await railsAPI.post("/goal_plans", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (response.status === 201) {
@@ -99,6 +111,10 @@ const GoalPlansCreatePage = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -213,6 +229,29 @@ const GoalPlansCreatePage = () => {
                     </p>
                   )}
                 </div>
+              </div>
+              {/* Image Upload */}
+              <div>
+                <label
+                  htmlFor="image"
+                  className="block text-sm font-bold text-gray-900"
+                >
+                  Upload Image:
+                </label>
+                <input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-indigo-50 file:px-4 file:py-1.5 file:text-sm file:font-semibold file:text-indigo-600 hover:file:bg-indigo-100"
+                />
+                {image && (
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt="Preview"
+                    className="mt-3 h-32 w-32 object-cover rounded-md"
+                  />
+                )}
               </div>
 
               {/* Goal Plan Advice */}

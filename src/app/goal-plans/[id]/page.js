@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Notification from "@/app/components/Notification";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { Switch } from "@headlessui/react";
+import Spinner from "@/app/components/Spinner";
 
 const GoalPlanPage = () => {
   const { id } = useParams();
@@ -15,6 +16,7 @@ const GoalPlanPage = () => {
   const [purpose, setPurpose] = useState("");
   const [advice, setAdvice] = useState("");
   const [creator, setCreator] = useState("");
+  const [img_url, setImageUrl] = useState(null);
   const [repeatTerm, setRepeatTerm] = useState("");
   const [repeatTime, setRepeatTime] = useState("09:00");
   const [setReminder, setSetReminder] = useState(true);
@@ -23,7 +25,7 @@ const GoalPlanPage = () => {
   const [durationLength, setDurationLength] = useState(null);
   const [durationMeasure, setDurationMeasure] = useState("");
   const [isPrivate, setIsPrivate] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
 
   const router = useRouter();
@@ -31,7 +33,6 @@ const GoalPlanPage = () => {
   useEffect(() => {
     if (!id) return;
 
-    setLoading(true);
     // Fetch goal plan data
     const fetchGoalPlanData = async () => {
       try {
@@ -42,6 +43,7 @@ const GoalPlanPage = () => {
           setTitle(goalPlanData.title);
           setPurpose(goalPlanData.purpose);
           setAdvice(goalPlanData.advice);
+          setImageUrl(goalPlanData.image_url);
           setCreator(goalPlanData.creator.username);
           setRepeatTerm(goalPlanData.repeat_term);
           setDuration(goalPlanData.duration);
@@ -112,6 +114,10 @@ const GoalPlanPage = () => {
     weekly: "Every Week",
     monthly: "Every Month",
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -200,11 +206,19 @@ const GoalPlanPage = () => {
           <div className="p-12">
             <div>
               <div className="flex items-center min-w-0 gap-x-4">
-                <img
-                  alt="Goal Plan image"
-                  src="https://img.freepik.com/free-vector/arrow-hitting-target_1034-50.jpg?ga=GA1.1.813922924.1739959609&semt=ais_hybrid"
-                  className="size-12 flex-none rounded-full bg-gray-50"
-                />
+                {img_url ? (
+                  <img
+                    alt="Goal Plan image"
+                    src={img_url}
+                    className="size-12 flex-none rounded-full bg-gray-50"
+                  />
+                ) : (
+                  <img
+                    alt="Goal Plan image"
+                    src="https://img.freepik.com/free-vector/arrow-hitting-target_1034-50.jpg?ga=GA1.1.813922924.1739959609&semt=ais_hybrid"
+                    className="size-12 flex-none rounded-full bg-gray-50"
+                  />
+                )}
                 <div className="min-w-0">
                   <h1 className="text-base/4 font-semibold text-gray-900">
                     {title}
