@@ -14,6 +14,11 @@ export function NotificationProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem("token"); // Get JWT token from storage
 
+    if (!token) {
+      console.warn("No token found, WebSocket connection will fail");
+      return;
+    }
+
     const fetchUserId = async () => {
       try {
         const user = await getUser(); // Wait for the user data
@@ -24,11 +29,6 @@ export function NotificationProvider({ children }) {
     };
 
     fetchUserId(); // Call the function
-
-    if (!token) {
-      console.warn("⚠️ No token found, WebSocket connection will fail");
-      return;
-    }
 
     // Attach the token to the WebSocket URL
     const consumer = createConsumer(`ws://localhost:4000/cable?token=${token}`);

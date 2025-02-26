@@ -16,6 +16,7 @@ const Login = () => {
       { email, password },
       () => {
         router.push("/dashboard"); // Redirect after session is created
+        window.location.reload();
       },
       (error) => {
         setError("Invalid email or password");
