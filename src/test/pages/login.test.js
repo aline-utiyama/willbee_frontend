@@ -17,6 +17,12 @@ describe("Login Component", () => {
   beforeEach(() => {
     pushMock = jest.fn();
     useRouter.mockReturnValue({ push: pushMock });
+
+    // Mock window.location.reload
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: { reload: jest.fn() },
+    });
   });
 
   it("renders login form correctly", () => {
