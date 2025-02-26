@@ -3,7 +3,6 @@ import Link from "next/link";
 import {
   Disclosure,
   DisclosureButton,
-  DisclosurePanel,
   Menu,
   MenuButton,
   MenuItem,
@@ -14,17 +13,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { logout } from "../actions/auth";
-
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function Navbar() {
   const pathname = usePathname(); // Get the current path
@@ -126,60 +114,60 @@ export default function Navbar() {
                     </div>
                     <div className="border-t border-gray-200 gap-4 justify-center items-center">
                       <MenuItem>
-                        <a
-                          href="/dashboard"
+                        <button
+                          onClick={() => router.push("/")}
                           className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                         >
                           <HomeIcon className="mr-2 h-5 w-5 text-gray-400" />
                           Home
-                        </a>
+                        </button>
                       </MenuItem>
                       <MenuItem>
-                        <a
-                          href="/goals/list"
+                        <button
+                          onClick={() => router.push("/goals/list")}
                           className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                         >
                           <TrophyIcon className="mr-2 h-5 w-5 text-gray-400" />
                           My Goals
-                        </a>
+                        </button>
                       </MenuItem>
                       <MenuItem>
-                        <a
-                          href="/goal-plans/list"
+                        <button
+                          onClick={() => router.push("/goal-plans/list")}
                           className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                         >
                           <ClipboardIcon className="mr-2 h-5 w-5 text-gray-400" />
                           Goal Plans
-                        </a>
+                        </button>
                       </MenuItem>
                       <MenuItem>
-                        <a
-                          href="/settings"
+                        <button
+                          onClick={() => router.push("/settings")}
                           className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                         >
                           <CogIcon className="mr-2 h-5 w-5 text-gray-400" />
                           User Settings
-                        </a>
+                        </button>
                       </MenuItem>
                     </div>
                     <div className="border-t border-gray-200 gap-4 justify-center items-center">
                       <MenuItem>
-                        <a
-                          href="#"
+                        <button
+                          onClick={() => router.push("#")}
                           className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                         >
                           <ChatBubbleBottomCenterIcon className="mr-2 h-5 w-5 text-gray-400" />
                           WillBlog
-                        </a>
+                        </button>
                       </MenuItem>
                       <MenuItem>
-                        <a
-                          href="#"
+                        <button
+                          onClick={() => router.push("#")}
                           className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                         >
                           <InformationCircleIcon className="mr-2 h-5 w-5 text-gray-400" />
                           Help & Support
-                        </a>
+                        </button>
                       </MenuItem>
                     </div>
                     <MenuItem>
