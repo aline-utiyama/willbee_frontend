@@ -40,7 +40,10 @@ export function NotificationProvider({ children }) {
           console.log("Connected to WebSocket!");
         },
         received(data) {
-          setNotifications((prev) => [...prev, data]);
+          setNotifications((prev) => {
+            const exists = prev.some((notif) => notif.id === data.id);
+            return exists ? prev : [...prev, data];
+          });
         },
         disconnected() {
           console.log("WebSocket Disconnected");
