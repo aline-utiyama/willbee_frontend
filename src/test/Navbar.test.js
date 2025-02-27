@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import Navbar from "@/app/components/Navbar";
 import { usePathname, useRouter } from "next/navigation";
 import { useNotifications } from "@/app/context/NotificationProvider";
@@ -60,9 +60,12 @@ describe("Navbar Component", () => {
     const userMenu = screen.getByText("Open user menu");
     fireEvent.click(userMenu);
 
+    expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("My Goals")).toBeInTheDocument();
-    expect(screen.getByText("My Profile")).toBeInTheDocument();
-    expect(screen.getByText("Settings")).toBeInTheDocument();
+    expect(screen.getByText("Goal Plans")).toBeInTheDocument();
+    expect(screen.getByText("User Settings")).toBeInTheDocument();
+    expect(screen.getByText("WillBlog")).toBeInTheDocument();
+    expect(screen.getByText("Help & Support")).toBeInTheDocument();
     expect(screen.getByText("Sign out")).toBeInTheDocument();
   });
 
@@ -86,5 +89,32 @@ describe("Navbar Component", () => {
 
     expect(logout).toHaveBeenCalled();
     expect(pushMock).toHaveBeenCalledWith("/login");
+  });
+
+  it("routes to the correct pages when dropdown menu items are clicked", () => {
+    const pushMock = jest.fn();
+    useRouter.mockReturnValue({ push: pushMock });
+    usePathname.mockReturnValue("/dashboard");
+
+    render(<Navbar />);
+
+    const userMenu = screen.getByText("Open user menu");
+    fireEvent.click(userMenu);
+
+    const menuItems = [
+      { text: "Home", href: "/" },
+      { text: "My Goals", href: "/goals/list" },
+      { text: "Goal Plans", href: "/goal-plans/list" },
+      { text: "User Settings", href: "/settings" },
+      { text: "WillBlog", href: "#" },
+      { text: "Help & Support", href: "#" },
+    ];
+
+    menuItems.forEach((item) => {
+      const menuItem = screen.getByText(item.text);
+      fireEvent.click(menuItem);
+      expect(pushMock).toHaveBeenCalledWith(item.href);
+      pushMock.mockClear(); // Clear the mock after each click to ensure each call is tested separately
+    });
   });
 });
