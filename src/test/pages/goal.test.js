@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import GoalPage from "@/app/goals/[id]/page";
 import railsAPI from "@/services/rails-api";
+import nextAPI from "@/services/next-api";
 import { useRouter, useParams } from "next/navigation";
 
 jest.mock("@/services/rails-api", () => ({
@@ -13,6 +14,10 @@ jest.mock("@/services/rails-api", () => ({
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
   useParams: jest.fn(),
+}));
+
+jest.mock("@/services/next-api", () => ({
+  post: jest.fn(),
 }));
 
 describe("GoalPage", () => {
