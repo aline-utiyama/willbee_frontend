@@ -87,7 +87,7 @@ export default function Navbar() {
                   </div>
                   <MenuItems
                     transition
-                    className="fixed inset-0 z-10 m-5 bg-white py-2 px-3 rounded-md ring-1 shadow-lg ring-black/5 transition focus:outline-none data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in gap-4 sm:absolute sm:flex sm:flex-col sm:w-96 sm:origin-top-right sm:right-0 sm:inset-auto sm:mt-2 "
+                    className="fixed inset-0 z-10 m-5 top-14 bg-white py-2 px-3 rounded-md ring-1 shadow-lg ring-black/5 transition focus:outline-none data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in gap-4 sm:absolute sm:flex sm:flex-col sm:w-96 sm:origin-top-right sm:right-0 sm:inset-auto sm:mt-2 "
                   >
                     <div className="px-2 py-4 flex items-center">
                       <img
