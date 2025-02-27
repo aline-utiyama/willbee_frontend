@@ -49,8 +49,8 @@ const GoalsList = () => {
   }
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="md:mx-auto md:w-full md:max-w-lg">
+    <div className="mt-3 mx-auto w-full md:max-w-lg">
+      <div className="py-12">
         <nav aria-label="Breadcrumb">
           <ol
             role="list"
@@ -102,10 +102,8 @@ const GoalsList = () => {
             </li>
           </ol>
         </nav>
-      </div>
-      <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
         {error && <p style={{ color: "red" }}>{error}</p>}
-        <div className="space-y-4 justify-self-center">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 mx-auto flex max-w-2xl items-center py-4 px-2">
           {goals.map((goal) => (
             <GoalCard
               key={goal.id}
