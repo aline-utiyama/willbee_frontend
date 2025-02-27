@@ -3,6 +3,7 @@ import GoalCreateWithAIPage from "@/app/goals/create-with-ai/page";
 import { useRouter } from "next/navigation";
 import railsAPI from "@/services/rails-api";
 import nextAPI from "@/services/next-api";
+import { useUser } from "@/app/context/UserProvider";
 
 jest.setTimeout(10000);
 
@@ -18,6 +19,20 @@ jest.mock("@/services/rails-api", () => ({
 jest.mock("@/services/next-api", () => ({
   post: jest.fn(),
 }));
+
+jest.mock("@/app/context/UserProvider", () => ({
+  useUser: jest.fn(),
+}));
+
+beforeEach(() => {
+  useUser.mockReturnValue({
+    user: {
+      id: "123",
+      name: "Test User",
+      image_url: "https://example.com/avatar.jpg",
+    },
+  });
+});
 
 describe("GoalCreateWithAIPage Component", () => {
   let pushMock;

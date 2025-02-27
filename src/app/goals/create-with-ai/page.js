@@ -6,8 +6,10 @@ import GoalForm from "@/app/components/GoalForm";
 import Notification from "@/app/components/Notification";
 import railsAPI from "@/services/rails-api";
 import Image from "next/image";
+import { useUser } from "@/app/context/UserProvider";
 
 const GoalCreateWithAIPage = () => {
+  const { user } = useUser();
   const [title, setTitle] = useState("");
   const [purpose, setPurpose] = useState("");
   const [repeatTerm, setRepeatTerm] = useState("daily");
@@ -275,7 +277,10 @@ const GoalCreateWithAIPage = () => {
                   {/* Avatar (User) */}
                   {msg.sender === "user" && (
                     <img
-                      src="https://i.pravatar.cc/40?img=1"
+                      src={
+                        user?.image_url ||
+                        "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg"
+                      }
                       alt="User Avatar"
                       className="w-10 h-10 rounded-full"
                     />
