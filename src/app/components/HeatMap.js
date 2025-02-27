@@ -9,7 +9,7 @@ const GoalProgressHeatmap = ({ goalData }) => {
     import("d3").then((d3) => {
       if (!goalData?.goal_progresses) return;
 
-      const margin = { top: 20, right: 10, bottom: 50, left: 30 };
+      const margin = { top: 20, right: 30, bottom: 50, left: 40 };
 
       const updateChart = () => {
         if (!svgRef.current) return; // Check if svgRef.current is not null
@@ -17,7 +17,7 @@ const GoalProgressHeatmap = ({ goalData }) => {
         const containerWidth = svgRef.current.parentElement.offsetWidth;
         const cellSize = containerWidth / Math.ceil(goalData.goal_progresses.length / 7);
         const width = containerWidth - margin.left - margin.right;
-        const height = 7 * cellSize + margin.top + margin.bottom;
+        const height = 200;
 
         d3.select(svgRef.current).selectAll("*").remove();
         const svg = d3
@@ -184,13 +184,13 @@ const GoalProgressHeatmap = ({ goalData }) => {
           .append("g")
           .attr(
             "transform",
-            `translate(0, ${height - margin.top - margin.bottom + 10})`
+            `translate(0, ${height - margin.top - margin.bottom + 20})`
           )
           .selectAll("text")
           .data(finalMonthPositions)
           .enter()
           .append("text")
-          .attr("x", (d) => xScale(d.week) + cellSize / 0.7)
+          .attr("x", (d) => xScale(d.week) + cellSize)
           .attr("y", 10)
           .attr("text-anchor", "middle")
           .attr("fill", "gray")
