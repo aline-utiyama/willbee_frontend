@@ -130,7 +130,7 @@ const CreateGoalPage = () => {
         />
       )}
 
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex min-h-full flex-1 flex-col px-6 py-12 lg:px-8">
         <div className="md:mx-auto md:w-full md:max-w-lg">
           <nav aria-label="Breadcrumb">
             <ol

@@ -15,7 +15,11 @@ const GoalsList = () => {
   const fetchGoals = async () => {
     try {
       const response = await railsAPI.get(`/goals`);
-      setGoals(response.data);
+      // Sort goals by `created_at` in descending order (newest first)
+      const sortedGoals = response.data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+      setGoals(sortedGoals);
       setLoading(false);
     } catch (err) {
       setError("Failed to fetch goals data");

@@ -220,8 +220,8 @@ const GoalPage = () => {
   }
 
   return (
-    <div className="mt-6 md:mx-auto md:w-full md:max-w-lg">
-      <div className="md:mx-auto md:w-full md:max-w-lg relative">
+    <div className="mt-6 mx-auto md:w-full md:max-w-lg">
+      <div className="mx-auto md:w-full md:max-w-lg relative">
         <div>
           <nav aria-label="Breadcrumb">
             <ol
@@ -385,10 +385,11 @@ const GoalPage = () => {
             </p>
             <button
               onClick={handleMarkTodayAsCompleted}
-              className={`px-4 py-2 rounded text-sm ${isCompleted
-                ? "bg-gray-400 text-white font-bold cursor-not-allowed"
-                : "bg-black text-white font-bold hover:bg-gray-600"
-                }`}
+              className={`px-4 py-2 rounded text-sm ${
+                isCompleted
+                  ? "bg-gray-400 text-white font-bold cursor-not-allowed"
+                  : "bg-black text-white font-bold hover:bg-gray-600"
+              }`}
               disabled={isCompleted} // Disable button if task is completed
             >
               {isCompleted ? "Task Completed" : "Mark as Completed"}
