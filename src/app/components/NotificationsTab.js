@@ -89,7 +89,7 @@ export default function NotificationsTab() {
                     <XMarkIcon aria-hidden="true" className="size-6" />
                   </button>
                   <div className="flex items-center">
-                    <div className=" w-[80px] h-12 p-[2px] rounded-full bg-gradient-to-r from-[#BE50C0] to-[#F5C419]">
+                    <div className=" w-[100px] h-12 p-[2px] rounded-full bg-gradient-to-r from-[#BE50C0] to-[#F5C419]">
                       <Image
                         alt="Bot Avatar"
                         src="/images/bee_bot.png"
