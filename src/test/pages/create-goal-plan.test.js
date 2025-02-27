@@ -25,6 +25,10 @@ jest.mock("@/services/rails-api", () => ({
 describe("GoalPlansCreatePage Component", () => {
   let pushMock;
 
+  beforeAll(() => {
+    global.URL.createObjectURL = jest.fn(() => "mock-image-url");
+  });
+
   beforeEach(() => {
     pushMock = jest.fn();
     useRouter.mockReturnValue({ push: pushMock });
@@ -61,19 +65,45 @@ describe("GoalPlansCreatePage Component", () => {
       target: { value: "Other" },
     });
 
+    // Ensure the file input exists
+    const fileInput = await waitFor(() =>
+      screen.getByLabelText(/Upload Image:/i)
+    );
+
+    // Mock file upload
+    const file = new File(["dummy-content"], "test-image.png", {
+      type: "image/png",
+    });
+
+    // Ensure Jest can detect file input change
+    Object.defineProperty(fileInput, "files", {
+      value: [file],
+    });
+
+    fireEvent.change(fileInput);
+
+    await waitFor(() =>
+      expect(screen.getByText("Create Goal Plan")).toBeInTheDocument()
+    );
+
     fireEvent.click(screen.getByText("Create Goal Plan"));
 
     await waitFor(() => {
-      expect(railsAPI.post).toHaveBeenCalledWith(
-        "/goal_plans",
-        expect.objectContaining({
-          goal_plan: expect.objectContaining({
-            title: "Test Goal Plan",
-            purpose: "Test Purpose",
-            category: "Other",
-          }),
-        })
-      );
+      // Get the FormData object from the mock API call
+      const formData = railsAPI.post.mock.calls[0][1];
+
+      // Ensure the request contains FormData
+      expect(formData).toBeInstanceOf(FormData);
+
+      // Verify that FormData contains the expected values
+      expect(formData.get("goal_plan[title]")).toBe("Test Goal Plan");
+      expect(formData.get("goal_plan[purpose]")).toBe("Test Purpose");
+      expect(formData.get("goal_plan[category]")).toBe("Other");
+
+      // Ensure the image file is included
+      expect(formData.get("goal_plan[image]")).toBeInstanceOf(File);
+
+      // Ensure navigation happens after submission
       expect(pushMock).toHaveBeenCalledWith("/goal-plans/456");
     });
   });

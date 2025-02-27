@@ -3,6 +3,7 @@ import Navbar from "@/app/components/Navbar";
 import { usePathname, useRouter } from "next/navigation";
 import { useNotifications } from "@/app/context/NotificationProvider";
 import { logout } from "@/app/actions/auth";
+import { useUser } from "@/app/context/UserProvider";
 
 // Mock Next.js hooks
 jest.mock("next/navigation", () => ({
@@ -17,6 +18,16 @@ jest.mock("@/app/actions/auth", () => ({
 jest.mock("@/app/context/NotificationProvider", () => ({
   useNotifications: jest.fn(),
 }));
+
+jest.mock("@/app/context/UserProvider", () => ({
+  useUser: jest.fn(),
+}));
+
+beforeEach(() => {
+  useUser.mockReturnValue({
+    user: null,
+  });
+});
 
 describe("Navbar Component", () => {
   it("renders the Navbar with login/signup buttons when on the homepage", () => {

@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import railsAPI from "@/services/rails-api";
 import GoalPlanCard from "@/app/components/GoalPlanCard";
+import Spinner from "@/app/components/Spinner";
 
 const GoalPlansList = () => {
   const [goalPlans, setGoalPlans] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const category = searchParams.get("category") || "";
   const router = useRouter();
@@ -16,14 +18,25 @@ const GoalPlansList = () => {
       const response = await railsAPI.get(`/goal_plans`, {
         params: category ? { category } : {},
       });
-      setGoalPlans(response.data);
+      const sortedData = response.data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+
+      setGoalPlans(sortedData);
     } catch (err) {
       setError("Failed to fetch goal plans data");
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
     fetchGoals();
   }, []);
+
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
       <div className="py-12">
