@@ -126,8 +126,8 @@ const GoalPlansCreatePage = () => {
         />
       )}
 
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="md:mx-auto md:w-full md:max-w-lg">
+      <div className="flex min-h-full flex-1 flex-col  px-6 py-12 lg:px-8">
+        <div className="mx-auto sm:w-full sm:max-w-lg">
           <nav aria-label="Breadcrumb">
             <ol
               role="list"
@@ -180,7 +180,7 @@ const GoalPlansCreatePage = () => {
           </nav>
         </div>
 
-        <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
+        <div className="mt-3 mx-auto sm:w-full sm:max-w-lg">
           <div className="px-12 py-12 rounded-md border-t border-gray-200 bg-white shadow-md">
             <form onSubmit={handleGoalPlanCreate} className="space-y-6">
               {/* Goal Plan Title */}

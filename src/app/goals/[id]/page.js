@@ -234,8 +234,8 @@ const GoalPage = () => {
 
   if (error) {
     return (
-      <div className="mt-3 md:mx-auto md:w-full md:max-w-lg">
-        <div className="md:mx-auto md:w-full md:max-w-lg relative">
+      <div className="mt-3 md:mx-auto sm:w-full sm:max-w-lg">
+        <div className="md:mx-auto sm:w-full sm:max-w-lg relative">
           <p className="text-red-500">{error}</p>
           <a
             href="/"
@@ -249,8 +249,8 @@ const GoalPage = () => {
   }
 
   return (
-    <div className="mt-6 md:mx-auto md:w-full md:max-w-lg">
-      <div className="md:mx-auto md:w-full md:max-w-lg relative">
+    <div className="mt-6 mx-auto sm:w-full sm:max-w-lg">
+      <div className="mx-auto sm:w-full sm:max-w-lg relative">
         <div>
           <nav aria-label="Breadcrumb">
             <ol
@@ -424,12 +424,16 @@ const GoalPage = () => {
         <div className="text-center py-8 justify-center align-middle flex flex-col gap-2">
           <p className="text-xl">My progress</p>
           {/* Progress graph */}
-          <div className="flex justify-center items-center pr-2 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
+          <div>
             {goal.graph_type == "bar" && goal.goal_progresses && (
-              <GoalProgressBarChart goalData={goal} />
+              <div className="flex justify-center items-center px-3 pt-4 rounded-md border-t border-gray-200 bg-white shadow-md">
+                <GoalProgressBarChart goalData={goal} />
+              </div>
             )}
             {goal.graph_type == "dot" && goal.goal_progresses && (
-              <GoalProgressHeatmap goalData={goal} />
+              <div className="flex justify-center items-center p-4 rounded-md border-t border-gray-200 bg-white shadow-md">
+                <GoalProgressHeatmap goalData={goal} />
+              </div>
             )}
           </div>
           {/* Mark as Completed Button */}
