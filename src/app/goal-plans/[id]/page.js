@@ -130,7 +130,7 @@ const GoalPlanPage = () => {
       )}
 
       <div className="flex min-h-full flex-1 flex-col px-6 py-12 lg:px-8">
-        <div className="md:mx-auto md:w-full md:max-w-lg">
+        <div className="mx-auto sm:w-full sm:max-w-lg">
           <nav className="px-12" aria-label="Breadcrumb">
             <ol
               role="list"

@@ -15,9 +15,14 @@ const GoalProgressHeatmap = ({ goalData }) => {
         if (!svgRef.current) return; // Check if svgRef.current is not null
 
         const containerWidth = svgRef.current.parentElement.offsetWidth;
-        const cellSize = containerWidth / Math.ceil(goalData.goal_progresses.length / 7);
         const width = containerWidth - margin.left - margin.right;
         const height = 200;
+
+        const numWeeks = Math.ceil(goalData.goal_progresses.length / 7);
+        const cellSize = Math.min(
+          width / numWeeks,
+          (height - margin.top - margin.bottom) / 7
+        );
 
         d3.select(svgRef.current).selectAll("*").remove();
         const svg = d3

@@ -49,7 +49,7 @@ const GoalsList = () => {
   }
 
   return (
-    <div className="mt-3 mx-auto w-full md:max-w-lg">
+    <div className="mt-3 mx-auto sm:w-full sm:max-w-lg">
       <div className="py-12">
         <nav aria-label="Breadcrumb">
           <ol

@@ -81,7 +81,7 @@ const Dashboard = () => {
     //     </div>
     //   </main>
     // </div>
-    <div className="mt-6 mx-auto md:w-full md:max-w-lg">
+    <div className="mt-6 mx-auto sm:w-full sm:max-w-lg">
       <div className="px-4">
         <div className="relative w-full my-8">
           <input

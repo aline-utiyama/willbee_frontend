@@ -226,7 +226,7 @@ const GoalCreateWithAIPage = () => {
         />
       )}
       <div className="flex flex-1 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="flex flex-col flex-1 md:mx-auto md:w-full md:max-w-lg">
+        <div className="flex flex-col flex-1 mx-auto sm:w-full sm:max-w-lg">
           <h2 className="text-lg font-semibold mb-4">
             Create a Goal with AI help
           </h2>
