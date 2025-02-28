@@ -19,7 +19,6 @@ describe("Footer", () => {
     const contactLink = screen.getByText("Contact us");
 
     // Check if the links link to correct page.
-    // TODO: currently no path in the links
     expect(aboutLink.closest("a")).toHaveAttribute("href", "#");
     expect(contactLink.closest("a")).toHaveAttribute("href", "#");
   });

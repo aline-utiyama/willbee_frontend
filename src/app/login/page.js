@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "../actions/auth";
-import Image from "next/image";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +16,7 @@ const Login = () => {
       { email, password },
       () => {
         router.push("/dashboard"); // Redirect after session is created
+        window.location.reload();
       },
       (error) => {
         setError("Invalid email or password");
@@ -27,20 +27,13 @@ const Login = () => {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          {/* <Image
-            src="/images/logo.png"
-            alt="Willbee Logo"
-            className="mx-auto h-10 w-auto"
-            width={90}
-            height={90}
-          /> */}
+        <div className="md:mx-auto md:w-full md:max-w-md">
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
             Sign in to your account
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-10 md:mx-auto md:w-full md:max-w-md px-12 py-12 rounded-md border-t border-gray-200 bg-white shadow-md">
           {error && <p style={{ color: "red" }}>{error}</p>}
           <form onSubmit={handleLogin} className="space-y-6">
             <div>

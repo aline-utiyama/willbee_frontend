@@ -13,10 +13,13 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@rails/actioncable": "^8.0.100",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
+    "d3": "^7.9.0",
     "js-cookie": "^3.0.5",
     "next": "15.1.5",
+    "openai": "^4.82.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -31,6 +34,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.5.1",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "ts-node": "^10.9.2"
   }
 }

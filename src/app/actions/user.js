@@ -5,7 +5,7 @@ export async function getUser() {
     const response = await railsAPI.get(`/users/settings`);
     return response.data.user;
   } catch (error) {
-    console.error("Failed to fetch user data:", error);
-    throw error; // Re-throw the error for further handling
+    console.warn("User not authenticated or failed to fetch user data.");
+    return null;
   }
 }

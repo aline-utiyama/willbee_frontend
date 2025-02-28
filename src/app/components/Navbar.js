@@ -3,33 +3,25 @@ import Link from "next/link";
 import {
   Disclosure,
   DisclosureButton,
-  DisclosurePanel,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ClipboardIcon, CogIcon, TrophyIcon, HomeIcon, ChatBubbleBottomCenterIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { logout } from "../actions/auth";
-
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import NotificationsTab from "./NotificationsTab.js";
+import { useUser } from "../context/UserProvider";
 
 export default function Navbar() {
+  const { user } = useUser();
   const pathname = usePathname(); // Get the current path
   const showAuthButtons = ["/", "/login", "/signup"].includes(pathname); // Check if we are on a page that should show login/signup
   const router = useRouter();
+  const username = "John Doe"; // Replace with actual username logic
 
   const handleLogout = async () => {
     logout(() => {
@@ -41,21 +33,7 @@ export default function Navbar() {
     <Disclosure as="nav" className="bg-white border-b border-gray-200">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            {/* Mobile menu button*/}
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset">
-              <span className="absolute -inset-0.5" />
-              <span className="sr-only">Open main menu</span>
-              <Bars3Icon
-                aria-hidden="true"
-                className="block size-6 group-data-open:hidden"
-              />
-              <XMarkIcon
-                aria-hidden="true"
-                className="hidden size-6 group-data-open:block"
-              />
-            </DisclosureButton>
-          </div>
+          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden"></div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <Link href="/">
               <div className="flex shrink-0 items-center">
@@ -68,25 +46,6 @@ export default function Navbar() {
                 />
               </div>
             </Link>
-            {/* Use the section below if we add any item to the nav menu */}
-            {/* <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? "page" : undefined}
-                    className={classNames(
-                      item.current
-                        ? "flex-1 border-b-2 border-transparent px-1 py-4 text-base font-medium whitespace-nowrap text-gray-900 border-indigo-600 text-indigo-600"
-                        : "flex-1 border-b-2 border-transparent px-1 py-4 text-base font-medium whitespace-nowrap text-gray-900"
-                    )}
-                  >
-                    {item.name}
-                  </a>
-                ))}
-              </div>
-            </div> */}
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {showAuthButtons ? (
@@ -108,53 +67,101 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <button
-                  type="button"
-                  className="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500  focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600 focus:outline-hidden"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon aria-hidden="true" className="size-6" />
-                </button>
+                <NotificationsTab></NotificationsTab>
 
                 {/* Profile dropdown */}
-                <Menu as="div" className="relative ml-3">
+                <Menu as="div" className="relative ml-3 justify-end">
                   <div>
                     <MenuButton className="relative flex rounded-full bg-indigo-600 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600 focus:outline-hidden">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <img
-                        alt=""
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        className="size-8 rounded-full"
+                        src={
+                          user?.image_url ||
+                          "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg"
+                        }
+                        alt="User Avatar"
+                        className="w-10 h-10 rounded-full object-cover"
                       />
                     </MenuButton>
                   </div>
                   <MenuItems
                     transition
-                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                    className="fixed inset-0 z-10 m-5 top-14 bg-white py-2 px-3 rounded-md ring-1 shadow-lg ring-black/5 transition focus:outline-none data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in gap-4 sm:absolute sm:flex sm:flex-col sm:w-96 sm:origin-top-right sm:right-0 sm:inset-auto sm:mt-2 "
                   >
-                    <MenuItem>
-                      <a
-                        href="/profile"
-                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                      >
-                        Your Profile
-                      </a>
-                    </MenuItem>
-                    <MenuItem>
-                      <a
-                        href="/settings"
-                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                      >
-                        Settings
-                      </a>
-                    </MenuItem>
-                    <MenuItem>
-                      <div className="block px-4 py-2">
+                    <div className="px-2 py-4 flex items-center">
+                      <img
+                        src={
+                          user?.image_url ||
+                          "https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg"
+                        }
+                        alt="User Avatar"
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      <p className="ml-3 text-sm text-gray-900 font-semibold">{username}</p>
+                    </div>
+                    <div className="border-t border-gray-200 gap-4 justify-center items-center">
+                      <MenuItem>
                         <button
-                          // className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          onClick={() => router.push("/")}
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <HomeIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          Home
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => router.push("/goals/list")}
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <TrophyIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          My Goals
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => router.push("/goal-plans/list")}
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <ClipboardIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          Goal Plans
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => router.push("/settings")}
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <CogIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          User Settings
+                        </button>
+                      </MenuItem>
+                    </div>
+                    <div className="border-t border-gray-200 gap-4 justify-center items-center">
+                      <MenuItem>
+                        <button
+                          onClick={() => router.push("#")}
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <ChatBubbleBottomCenterIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          WillBlog
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => router.push("#")}
+                          className="flex items-center px-2 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                        >
+                          <InformationCircleIcon className="mr-2 h-5 w-5 text-gray-400" />
+                          Help & Support
+                        </button>
+                      </MenuItem>
+                    </div>
+                    <MenuItem>
+                      <div className="block px-2 py-2">
+                        <button
+                          className="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                           onClick={handleLogout}
                         >
                           Sign out
@@ -166,29 +173,8 @@ export default function Navbar() {
               </>
             )}
           </div>
-        </div>
-      </div>
-
-      <DisclosurePanel className="sm:hidden">
-        <div className="space-y-1 px-2 pt-2 pb-3">
-          {navigation.map((item) => (
-            <DisclosureButton
-              key={item.name}
-              as="a"
-              href={item.href}
-              aria-current={item.current ? "page" : undefined}
-              className={classNames(
-                item.current
-                  ? "bg-gray-900 text-white"
-                  : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                "block rounded-md px-3 py-2 text-base font-medium"
-              )}
-            >
-              {item.name}
-            </DisclosureButton>
-          ))}
-        </div>
-      </DisclosurePanel>
-    </Disclosure>
+        </div >
+      </div >
+    </Disclosure >
   );
 }
