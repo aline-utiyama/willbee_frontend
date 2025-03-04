@@ -371,7 +371,7 @@ describe("GoalPage", () => {
     );
   });
 
-  it("displays and updates the progress graph correctly", async () => {
+  it("displays and updates the bar progress graph correctly", async () => {
     const goalData = {
       title: "Master Kanji",
       purpose: "Pass JLPT N1",
@@ -381,6 +381,37 @@ describe("GoalPage", () => {
       ],
       repeat_term: "daily",
       graph_type: "bar",
+    };
+    railsAPI.get.mockResolvedValueOnce({ status: 200, data: goalData });
+    render(<GoalPage />);
+
+    await waitFor(() =>
+      expect(screen.getByText("Master Kanji")).toBeInTheDocument()
+    );
+
+    // Check if the graph is displayed
+    expect(screen.getByText("My progress")).toBeInTheDocument();
+
+    // Simulate marking a task as completed
+    railsAPI.patch.mockResolvedValueOnce({ status: 200 });
+    fireEvent.click(screen.getByText("Mark as Completed"));
+
+    await waitFor(() => {
+      // Check if the graph is updated
+      expect(screen.getByText("Task Completed")).toBeInTheDocument();
+    });
+  });
+
+  it("displays and updates the heatmap progress graph correctly", async () => {
+    const goalData = {
+      title: "Master Kanji",
+      purpose: "Pass JLPT N1",
+      goal_progresses: [
+        { date: "2025-02-01", completed: false },
+        { date: "2025-02-20", completed: true },
+      ],
+      repeat_term: "daily",
+      graph_type: "dot",
     };
     railsAPI.get.mockResolvedValueOnce({ status: 200, data: goalData });
     render(<GoalPage />);

@@ -160,24 +160,12 @@ const GoalCreateWithAIPage = () => {
       formErrors.purpose = "Purpose is required.";
     }
 
-    if (!repeatTerm) {
-      formErrors.repeatTerm = "Repeat term is required.";
-    }
-
     if (!repeatTime) {
       formErrors.repeatTime = "Repeat time is required.";
     }
 
-    if (setReminder && reminderMinutes < 0) {
-      formErrors.reminderMinutes = "Reminder minutes are required.";
-    }
-
     if (duration === "specific_duration" && !durationLength) {
       formErrors.durationLength = "Duration length is required.";
-    }
-
-    if (duration === "specific_duration" && !durationMeasure) {
-      formErrors.durationMeasure = "Duration measure is required.";
     }
 
     if (Object.keys(formErrors).length > 0) {

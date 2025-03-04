@@ -87,6 +87,10 @@ describe("GoalCreateWithAIPage Component", () => {
         title: "AI Suggested Goal",
         purpose: "AI Suggested Purpose",
         advice: "AI Advice",
+        repeat_term: "daily",
+        duration: "specific_duration",
+        duration_length: 30,
+        duration_measure: "Minutes",
       },
     });
     railsAPI.post.mockResolvedValue({ status: 201, data: { id: "456" } });
@@ -190,15 +194,25 @@ describe("GoalCreateWithAIPage Component", () => {
       target: { value: "" },
     });
 
-    fireEvent.change(screen.getByLabelText("Duration:"), {
+    fireEvent.change(screen.getByLabelText("Time:"), {
       target: { value: "" },
     });
 
-    fireEvent.click(screen.getByText("Create Goal"));
+    fireEvent.change(screen.getByTestId("duration_length"), {
+      target: { value: "" },
+    });
+
+    await waitFor(() => {
+      fireEvent.click(screen.getByText("Create Goal"));
+    });
 
     await waitFor(() => {
       expect(screen.getByText("Title is required.")).toBeInTheDocument();
       expect(screen.getByText("Purpose is required.")).toBeInTheDocument();
+      expect(screen.getByText("Repeat time is required.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Duration length is required.")
+      ).toBeInTheDocument();
     });
   });
 
