@@ -1,24 +1,54 @@
+# README: How to Run the Next.js App
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+### Clone the Repository
+
+To get started, clone the repository using Git:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/your-nextjs-project.git
+cd your-nextjs-project
+```
+
+### Install Dependencies
+
+Make sure you have [Node.js](https://nodejs.org) installed. Then, install dependencies using one of the following package managers:
+
+```bash
+npm install  # Using npm
+yarn install # Using yarn
+pnpm install # Using pnpm
+bun install  # Using bun
+```
+
+### Run the Development Server
+
+Once dependencies are installed, start the development server:
+
+```bash
+npm run dev  # or yarn dev or pnpm dev or bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Running Jest Tests
+
+To run Jest tests, ensure Jest is installed, then execute:
+
+```bash
+npm test  # or yarn test or pnpm test
+```
+
+If Jest is not installed, you can add it using:
+
+```bash
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+```
 
 ## Learn More
 
