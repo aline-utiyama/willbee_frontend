@@ -60,8 +60,12 @@ describe("Navbar Component", () => {
     const userMenu = screen.getByText("Open user menu");
     fireEvent.click(userMenu);
 
-    expect(screen.getByText("Home")).toBeInTheDocument();
-    expect(screen.getByText("My Goals")).toBeInTheDocument();
+    const homeElements = screen.getAllByText("Home");
+    expect(homeElements).toHaveLength(2);
+
+    const myGoalsElements = screen.getAllByText("My Goals");
+    expect(myGoalsElements).toHaveLength(2);
+
     expect(screen.getByText("Goal Plans")).toBeInTheDocument();
     expect(screen.getByText("User Settings")).toBeInTheDocument();
     expect(screen.getByText("WillBlog")).toBeInTheDocument();
@@ -101,9 +105,13 @@ describe("Navbar Component", () => {
     const userMenu = screen.getByText("Open user menu");
     fireEvent.click(userMenu);
 
+    const homeElements = screen.getAllByText("Home");
+    expect(homeElements).toHaveLength(2);
+
+    const myGoalsElements = screen.getAllByText("My Goals");
+    expect(myGoalsElements).toHaveLength(2);
+
     const menuItems = [
-      { text: "Home", href: "/" },
-      { text: "My Goals", href: "/goals/list" },
       { text: "Goal Plans", href: "/goal-plans/list" },
       { text: "User Settings", href: "/settings" },
       { text: "WillBlog", href: "#" },

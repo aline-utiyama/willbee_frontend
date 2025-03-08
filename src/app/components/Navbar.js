@@ -1,4 +1,3 @@
-
 "use client";
 import Link from "next/link";
 import {
@@ -8,7 +7,14 @@ import {
   MenuItems,
   Disclosure,
 } from "@headlessui/react";
-import { ClipboardIcon, CogIcon, TrophyIcon, HomeIcon, ChatBubbleBottomCenterIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
+import {
+  ClipboardIcon,
+  CogIcon,
+  TrophyIcon,
+  HomeIcon,
+  ChatBubbleBottomCenterIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -48,7 +54,6 @@ export default function Navbar() {
       router.push("/login"); // Redirect after session is destroyed
     });
   };
-
 
   return (
     <>
@@ -110,7 +115,7 @@ export default function Navbar() {
                     </div>
                     <MenuItems
                       transition
-                      className="fixed inset-0 z-10 m-5 top-14 bg-white py-2 px-3 rounded-md ring-1 shadow-lg ring-black/5 transition focus:outline-none data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in gap-4 sm:absolute sm:flex sm:flex-col sm:w-96 sm:origin-top-right sm:right-0 sm:inset-auto sm:mt-2 "
+                      className="fixed inset-0 z-10 m-5 top-14 bg-white py-2 px-3 rounded-md ring-1 shadow-lg ring-black/5 transition focus:outline-none data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in gap-4 absolute flex flex-col w-96 origin-top-right right-0 inset-auto mt-2 "
                     >
                       <div className="px-2 py-4 flex items-center">
                         <img
@@ -121,7 +126,9 @@ export default function Navbar() {
                           alt="User Avatar"
                           className="w-10 h-10 rounded-full object-cover"
                         />
-                        <p className="ml-3 text-sm text-gray-900 font-semibold">{username}</p>
+                        <p className="ml-3 text-sm text-gray-900 font-semibold">
+                          {username}
+                        </p>
                       </div>
                       <div className="border-t border-gray-200 gap-4 justify-center items-center">
                         <MenuItem>
@@ -196,44 +203,45 @@ export default function Navbar() {
                 </>
               )}
             </div>
-          </div >
-        </div >
-      </Disclosure >
+          </div>
+        </div>
+      </Disclosure>
 
       {/* Bottom Tab Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
-        <div className="flex justify-around items-center h-16">
-          <button
-            onClick={() => router.push("/")}
-            className="flex flex-col items-center text-sm text-gray-700 hover:text-indigo-600"
-          >
-            <HomeIcon className="h-6 w-6" />
-            <span>Home</span>
-          </button>
-          <button
-            onClick={() => router.push("/goals/list")}
-            className="flex flex-col items-center text-sm text-gray-700 hover:text-indigo-600"
-          >
-            <TrophyIcon className="h-6 w-6" />
-            <span>Goals</span>
-          </button>
-          <button
-            onClick={() => router.push("/goal-plans/list")}
-            className="flex flex-col items-center text-sm text-gray-700 hover:text-indigo-600"
-          >
-            <ClipboardIcon className="h-6 w-6" />
-            <span>Plans</span>
-          </button>
-          <button
-            onClick={() => router.push("/settings")}
-            className="flex flex-col items-center text-sm text-gray-700 hover:text-indigo-600"
-          >
-            <CogIcon className="h-6 w-6" />
-            <span>Settings</span>
-          </button>
-
+      {!showAuthButtons && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10 md:hidden">
+          <div className="flex justify-around items-center h-16">
+            <button
+              onClick={() => router.push("/")}
+              className="flex flex-col items-center text-sm text-gray-700 hover:text-indigo-600"
+            >
+              <HomeIcon className="h-6 w-6" />
+              <span>Home</span>
+            </button>
+            <button
+              onClick={() => router.push("/goals/list")}
+              className="flex flex-col items-center text-sm text-gray-700 hover:text-indigo-600"
+            >
+              <TrophyIcon className="h-6 w-6" />
+              <span>My Goals</span>
+            </button>
+            <button
+              onClick={() => router.push("/goal-plans/list")}
+              className="flex flex-col items-center text-sm text-gray-700 hover:text-indigo-600"
+            >
+              <ClipboardIcon className="h-6 w-6" />
+              <span>Plans</span>
+            </button>
+            <button
+              onClick={() => router.push("/settings")}
+              className="flex flex-col items-center text-sm text-gray-700 hover:text-indigo-600"
+            >
+              <CogIcon className="h-6 w-6" />
+              <span>Settings</span>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

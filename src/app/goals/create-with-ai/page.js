@@ -214,8 +214,8 @@ const GoalCreateWithAIPage = () => {
         />
       )}
 
-      <div className="flex min-h-full flex-1 flex-col px-6 py-12 lg:px-8">
-        <div className="mx-auto sm:w-full sm:max-w-lg">
+      <div className="flex flex-col flex-1 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="flex flex-col flex-1 mx-auto sm:w-full sm:max-w-lg">
           <nav aria-label="Breadcrumb">
             <ol
               role="list"
@@ -266,8 +266,6 @@ const GoalCreateWithAIPage = () => {
               </li>
             </ol>
           </nav>
-        </div>
-        <div className="flex flex-col flex-1 mx-auto sm:w-full sm:max-w-lg">
           <h2 className="text-lg font-semibold mb-4">
             Create a Goal with AI help
           </h2>
@@ -279,12 +277,13 @@ const GoalCreateWithAIPage = () => {
               {messages.map((msg, index) => (
                 <div
                   key={index}
-                  className={`flex items-center space-x-2 ${msg.sender === "user" ? "justify-end" : "justify-start"
-                    }`}
+                  className={`flex items-center space-x-2 ${
+                    msg.sender === "user" ? "justify-end" : "justify-start"
+                  }`}
                 >
                   {/* Avatar (Bot) */}
                   {msg.sender === "bot" && (
-                    <div className=" w-[100px] h-12 p-[2px] rounded-full bg-gradient-to-r from-[#BE50C0] to-[#F5C419]">
+                    <div className="relative w-12 h-12 p-[2px] rounded-full bg-gradient-to-r from-[#BE50C0] to-[#F5C419]">
                       <Image
                         alt="Bot Avatar"
                         src="/images/bee_bot.png"
@@ -297,10 +296,11 @@ const GoalCreateWithAIPage = () => {
 
                   {/* Message Bubble */}
                   <div
-                    className={`p-3 rounded-xl max-w-xs ${msg.sender === "user"
-                      ? "bg-gray-100  ml-auto"
-                      : "bg-white"
-                      }`}
+                    className={`p-3 rounded-xl max-w-xs ${
+                      msg.sender === "user"
+                        ? "bg-gray-100  ml-auto"
+                        : "bg-white"
+                    }`}
                   >
                     {msg.text.includes("http") ? (
                       <img
@@ -329,30 +329,32 @@ const GoalCreateWithAIPage = () => {
             </div>
 
             {botResponse ? (
-              <GoalForm
-                title={title}
-                setTitle={setTitle}
-                purpose={purpose}
-                setPurpose={setPurpose}
-                repeatTerm={repeatTerm}
-                setRepeatTerm={setRepeatTerm}
-                repeatTime={repeatTime}
-                setRepeatTime={setRepeatTime}
-                duration={duration}
-                setDuration={setDuration}
-                durationLength={durationLength}
-                setDurationLength={setDurationLength}
-                durationMeasure={durationMeasure}
-                setDurationMeasure={setDurationMeasure}
-                setReminder={setReminder}
-                setSetReminder={setSetReminder}
-                reminderMinutes={reminderMinutes}
-                setReminderMinutes={setReminderMinutes}
-                errors={errors}
-                handleGoalCreate={handleGoalCreate}
-              />
+              <div className="mb-12">
+                <GoalForm
+                  title={title}
+                  setTitle={setTitle}
+                  purpose={purpose}
+                  setPurpose={setPurpose}
+                  repeatTerm={repeatTerm}
+                  setRepeatTerm={setRepeatTerm}
+                  repeatTime={repeatTime}
+                  setRepeatTime={setRepeatTime}
+                  duration={duration}
+                  setDuration={setDuration}
+                  durationLength={durationLength}
+                  setDurationLength={setDurationLength}
+                  durationMeasure={durationMeasure}
+                  setDurationMeasure={setDurationMeasure}
+                  setReminder={setReminder}
+                  setSetReminder={setSetReminder}
+                  reminderMinutes={reminderMinutes}
+                  setReminderMinutes={setReminderMinutes}
+                  errors={errors}
+                  handleGoalCreate={handleGoalCreate}
+                />
+              </div>
             ) : (
-              <div className="flex flex-col border border-gray-200 rounded-lg  p-4 bg-white h-36 shadow-lg">
+              <div className="flex flex-col border border-gray-200 rounded-lg mb-12  p-4 bg-white h-36 shadow-lg">
                 {/* Input Box */}
                 <textarea
                   className="flex-1 resize-none p-2 border-none outline-none focus:ring-0 text-gray-900"

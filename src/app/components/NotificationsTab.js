@@ -68,10 +68,7 @@ export default function NotificationsTab() {
         )}
       </button>
       {open && (
-        <div
-          className="fixed top-14 right-0 z-10 m-5 bg-white py-2 px-3 rounded-md ring-1 shadow-lg ring-black/5 transition focus:outline-none data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in gap-4 sm:absolute sm:flex sm:flex-col sm:w-96 sm:origin-top-right sm:mt-2 max-h-[80vh] overflow-y-auto"
-          ref={dropdownRef}
-        >
+        <div className="absolute right-[-48px] w-96 p-2 z-50" ref={dropdownRef}>
           {notifications.length === 0 ? (
             <div className="relative p-8 mb-2 bg-white shadow-lg rounded-md border-t border-gray-200">
               <p>No notifications.</p>

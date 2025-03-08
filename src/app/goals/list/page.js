@@ -50,7 +50,7 @@ const GoalsList = () => {
 
   return (
     <div className="mt-3 mx-auto sm:w-full sm:max-w-lg">
-      <div className="py-12">
+      <div className="py-6">
         <nav aria-label="Breadcrumb">
           <ol
             role="list"
