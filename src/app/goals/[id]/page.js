@@ -377,7 +377,7 @@ const GoalPage = () => {
             )
           )}
 
-          <div className="relative w-12 h-12 p-[2px] rounded-full bg-gradient-to-r from-[#BE50C0] to-[#F5C419]">
+          <div className="w-[100px] h-12 p-[2px] rounded-full bg-gradient-to-r from-[#BE50C0] to-[#F5C419]">
             <Image
               alt="Bot Bee"
               src="/images/bee_bot.png"
@@ -443,11 +443,10 @@ const GoalPage = () => {
             </p>
             <button
               onClick={handleMarkTodayAsCompleted}
-              className={`px-4 py-2 rounded text-sm ${
-                isCompleted
+              className={`px-4 py-2 rounded text-sm ${isCompleted
                   ? "bg-gray-400 text-white font-bold cursor-not-allowed"
                   : "bg-black text-white font-bold hover:bg-gray-600"
-              }`}
+                }`}
               disabled={isCompleted} // Disable button if task is completed
             >
               {isCompleted ? "Task Completed" : "Mark as Completed"}

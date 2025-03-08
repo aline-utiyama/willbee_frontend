@@ -140,7 +140,7 @@ const CreateGoalPage = () => {
               <li>
                 <div className="flex items-center">
                   <a
-                    href="#"
+                    href="/dashboard"
                     className="mr-2 text-md font-medium text-gray-900"
                   >
                     <svg
