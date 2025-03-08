@@ -2,7 +2,6 @@
 import Link from "next/link";
 import {
   Disclosure,
-  DisclosureButton,
   Menu,
   MenuButton,
   MenuItem,
@@ -10,24 +9,44 @@ import {
 } from "@headlessui/react";
 import { ClipboardIcon, CogIcon, TrophyIcon, HomeIcon, ChatBubbleBottomCenterIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { logout } from "../actions/auth";
 import NotificationsTab from "./NotificationsTab.js";
 import { useUser } from "../context/UserProvider";
+import { getUser } from "../actions/user";
 
 export default function Navbar() {
   const { user } = useUser();
   const pathname = usePathname(); // Get the current path
   const showAuthButtons = ["/", "/login", "/signup"].includes(pathname); // Check if we are on a page that should show login/signup
   const router = useRouter();
-  const username = "John Doe"; // Replace with actual username logic
+  const [username, setUsername] = useState("");
 
   const handleLogout = async () => {
     logout(() => {
       router.push("/login"); // Redirect after session is destroyed
     });
   };
+  const fetchUserData = async () => {
+    try {
+      // Update state with user data
+      const userData = await getUser(); // Call the getUser action
+      const { username } = userData;
+
+      setUsername(username || "");
+    } catch (err) {
+      //Log out and redirect to login page if fetching user data fails
+      logout(() => {
+        router.push("/login");
+      });
+    }
+  };
+  // Fetch user data on component mount
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   return (
     <Disclosure as="nav" className="bg-white border-b border-gray-200">
