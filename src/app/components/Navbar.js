@@ -73,7 +73,6 @@ export default function Navbar() {
                 <Menu as="div" className="relative ml-3 justify-end">
                   <div>
                     <MenuButton className="relative flex rounded-full bg-indigo-600 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600 focus:outline-hidden">
-                      <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <img
                         src={
