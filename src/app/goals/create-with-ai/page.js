@@ -213,7 +213,8 @@ const GoalCreateWithAIPage = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      <div className="flex flex-1 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+
+      <div className="flex flex-col flex-1 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col flex-1 mx-auto sm:w-full sm:max-w-lg">
           <h2 className="text-lg font-semibold mb-4">
             Create a Goal with AI help
@@ -278,30 +279,32 @@ const GoalCreateWithAIPage = () => {
             </div>
 
             {botResponse ? (
-              <GoalForm
-                title={title}
-                setTitle={setTitle}
-                purpose={purpose}
-                setPurpose={setPurpose}
-                repeatTerm={repeatTerm}
-                setRepeatTerm={setRepeatTerm}
-                repeatTime={repeatTime}
-                setRepeatTime={setRepeatTime}
-                duration={duration}
-                setDuration={setDuration}
-                durationLength={durationLength}
-                setDurationLength={setDurationLength}
-                durationMeasure={durationMeasure}
-                setDurationMeasure={setDurationMeasure}
-                setReminder={setReminder}
-                setSetReminder={setSetReminder}
-                reminderMinutes={reminderMinutes}
-                setReminderMinutes={setReminderMinutes}
-                errors={errors}
-                handleGoalCreate={handleGoalCreate}
-              />
+              <div className="mb-12">
+                <GoalForm
+                  title={title}
+                  setTitle={setTitle}
+                  purpose={purpose}
+                  setPurpose={setPurpose}
+                  repeatTerm={repeatTerm}
+                  setRepeatTerm={setRepeatTerm}
+                  repeatTime={repeatTime}
+                  setRepeatTime={setRepeatTime}
+                  duration={duration}
+                  setDuration={setDuration}
+                  durationLength={durationLength}
+                  setDurationLength={setDurationLength}
+                  durationMeasure={durationMeasure}
+                  setDurationMeasure={setDurationMeasure}
+                  setReminder={setReminder}
+                  setSetReminder={setSetReminder}
+                  reminderMinutes={reminderMinutes}
+                  setReminderMinutes={setReminderMinutes}
+                  errors={errors}
+                  handleGoalCreate={handleGoalCreate}
+                />
+              </div>
             ) : (
-              <div className="flex flex-col border border-gray-200 rounded-lg  p-4 bg-white h-36 shadow-lg">
+              <div className="flex flex-col border border-gray-200 rounded-lg mb-12  p-4 bg-white h-36 shadow-lg">
                 {/* Input Box */}
                 <textarea
                   className="flex-1 resize-none p-2 border-none outline-none focus:ring-0 text-gray-900"

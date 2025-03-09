@@ -249,7 +249,7 @@ const GoalPage = () => {
   }
 
   return (
-    <div className="mt-6 mx-auto sm:w-full sm:max-w-lg">
+    <div className="mt-6 mx-auto sm:w-full sm:max-w-lg mb-12">
       <div className="mx-auto sm:w-full sm:max-w-lg relative">
         <div>
           <nav aria-label="Breadcrumb">

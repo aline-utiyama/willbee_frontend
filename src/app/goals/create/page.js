@@ -130,61 +130,60 @@ const CreateGoalPage = () => {
         />
       )}
 
-      <div className="flex min-h-full flex-1 flex-col px-6 py-12 lg:px-8">
-        <div className="mx-auto sm:w-full sm:max-w-lg">
-          <nav aria-label="Breadcrumb">
-            <ol
-              role="list"
-              className="mx-auto flex max-w-2xl items-center space-x-2 px-2"
-            >
-              <li>
-                <div className="flex items-center">
-                  <a
-                    href="#"
-                    className="mr-2 text-md font-medium text-gray-900"
-                  >
+      <div className="flex min-h-full flex-1 flex-col px-6 py-6 lg:px-8">
+        <div className="mt-3 mx-auto sm:w-full sm:max-w-lg">
+          <div className="mx-auto sm:w-full sm:max-w-lg mb-3">
+            <nav aria-label="Breadcrumb">
+              <ol
+                role="list"
+                className="mx-auto flex max-w-2xl items-center space-x-2 px-2"
+              >
+                <li>
+                  <div className="flex items-center">
+                    <a
+                      href="/dashboard"
+                      className="mr-2 text-md font-medium text-gray-900"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        className="h-5 w-4 text-gray-600"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M9.293 2.293a1 1 0 0 1 1.414 0l7 7A1 1 0 0 1 17 11h-1v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6H3a1 1 0 0 1-.707-1.707l7-7Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </a>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
-                      className="h-5 w-4 text-gray-600"
+                      className="h-6 w-4 text-gray-300"
                     >
                       <path
                         fillRule="evenodd"
-                        d="M9.293 2.293a1 1 0 0 1 1.414 0l7 7A1 1 0 0 1 17 11h-1v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6H3a1 1 0 0 1-.707-1.707l7-7Z"
+                        d="M12.528 3.047a.75.75 0 0 1 .449.961L8.433 16.504a.75.75 0 1 1-1.41-.512l4.544-12.496a.75.75 0 0 1 .961-.449Z"
                         clipRule="evenodd"
                       />
                     </svg>
-                  </a>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="h-6 w-4 text-gray-300"
+                  </div>
+                </li>
+
+                <li className="text-md">
+                  <a
+                    href="#"
+                    aria-current="page"
+                    className="font-medium text-gray-500 hover:text-gray-600"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M12.528 3.047a.75.75 0 0 1 .449.961L8.433 16.504a.75.75 0 1 1-1.41-.512l4.544-12.496a.75.75 0 0 1 .961-.449Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </li>
-
-              <li className="text-md">
-                <a
-                  href="#"
-                  aria-current="page"
-                  className="font-medium text-gray-500 hover:text-gray-600"
-                >
-                  Create your goal
-                </a>
-              </li>
-            </ol>
-          </nav>
-        </div>
-
-        <div className="mt-3 mx-auto sm:w-full sm:max-w-lg">
+                    Create your goal
+                  </a>
+                </li>
+              </ol>
+            </nav>
+          </div>
           <div className="px-12 py-12 rounded-md border-t border-gray-200 bg-white shadow-md">
             <form onSubmit={handleGoalCreate} className="space-y-6">
               {/* Goal Title */}

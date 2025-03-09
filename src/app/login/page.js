@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "../actions/auth";
+import Link from "next/link";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -100,12 +101,12 @@ const Login = () => {
 
           <p className="mt-10 text-center text-sm/6 text-gray-500">
             Don't have an account?{" "}
-            <a
+            <Link
               href="/signup"
               className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
               Sign up here
-            </a>
+            </Link>
           </p>
         </div>
       </div>
